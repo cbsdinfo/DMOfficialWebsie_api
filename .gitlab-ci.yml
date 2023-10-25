@@ -1,0 +1,48 @@
+before_script:
+  #中文亂碼問題
+  - chcp 65001
+  #- cd src
+
+# 執行的 job 
+stages:
+  - build
+  - deploy
+
+# 校驗程式碼
+build-job:
+  stage: build
+  # 將會執行的指令碼
+  script:
+    - dotnet restore
+    - dotnet build
+  # 哪個分支會執行
+  only:
+    - main
+    #runner 註冊時的 tag，這裡指會觸發的 runner
+  tags:
+    - main
+deploy-job:
+  stage: deploy
+  # 將會執行的指令碼
+  script:
+    # 停止 IIS 對應站點
+    - C:\Windows\System32\inetsrv\appcmd.exe stop site $env:WebSiteName
+    # 停止程序池
+    - C:\Windows\System32\inetsrv\appcmd.exe stop apppool /apppool.name:"$env:WebSiteName"
+    # 宣告一個變數儲存當前時間，用作備份資料資料夾名稱
+    #- $datetime=Get-Date -Format 'yyyy-MM-dd-HH-mm'
+    # 編譯打包專案
+    - echo $env:WebSitePath\service
+    - dotnet publish -c Debug -o $env:WebSitePath\service
+     # 啟動程序池
+    - C:\Windows\System32\inetsrv\appcmd.exe start apppool /apppool.name:"$env:WebSiteName"
+    # 啟動 IIS 站點
+    - C:\Windows\System32\inetsrv\appcmd.exe start site $env:WebSiteName
+  
+  # 哪個分支會執行
+  only:
+    - main
+  #runner 註冊時的 tag，這裡指會觸發的 runner
+  tags:
+    - main
+

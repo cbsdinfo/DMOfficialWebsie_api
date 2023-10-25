@@ -1,0 +1,78 @@
+﻿using System;
+using Infrastructure;
+using Infrastructure.Cache;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
+using NUnit.Framework;
+using donkeymove.App.SSO;
+using donkeymove.Repository.Domain;
+using System.Security.Principal;
+using donkeymove.App.Request;
+
+namespace donkeymove.App.Test
+{
+    internal class Test{ModuleCode} : TestBase
+    {
+        public override ServiceCollection GetService()
+        {
+            var services = new ServiceCollection();
+
+            return services;
+        }
+
+        [Test, Order(0)]
+        public void TestAdd()
+        {
+          var addObj=new AddOrUpdate{ClassName}Req{
+             {AddObj}
+          };
+            Console.WriteLine(addObj);
+            var app = _autofacServiceProvider.GetService<{ModuleCode}>
+    ();
+
+    app.Add(addObj);
+
+    var obj = app.Get(addObj.Id);
+    Console.WriteLine(JsonHelper.Instance.Serialize(obj));
+    }
+
+    [Test, Order(1)]
+    public void TestLoad()
+    {
+    var app = _autofacServiceProvider.GetService<{ModuleCode}>
+        ();
+        var result = app.Load(new Query{ClassName}ListReq
+        {
+        limit = 10,
+        page = 1
+        });
+        Console.WriteLine(JsonHelper.Instance.Serialize(result));
+        }
+
+        [Test, Order(2)]
+        public void TestUpdate()
+        {
+        var updateObj=new AddOrUpdate{ClassName}Req{
+        {UpdateObj}
+        };
+        Console.WriteLine(updateObj);
+        var app = _autofacServiceProvider.GetService<{ModuleCode}>
+            ();
+
+            app.Update(updateObj);
+
+            var obj = app.Get(updateObj.Id);
+
+            Console.WriteLine(JsonHelper.Instance.Serialize(obj));
+            }
+            [Test, Order(3)]
+            public void TestDel()
+            {
+            var app = _autofacServiceProvider.GetService<{ModuleCode}>
+                ();
+                app.Delete(new[] { "00000" });
+                }
+
+                }
+                }

@@ -1,0 +1,98 @@
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using donkeymove.App.Interface;
+using donkeymove.App.Request;
+using donkeymove.App.Response;
+using donkeymove.Repository;
+using donkeymove.Repository.Domain;
+using donkeymove.Repository.Interface;
+
+namespace donkeymove.App
+{
+    public class {ModuleCode} : {BaseAppName}<{ClassName},donkeymoveDBContext>
+    {
+
+    /// <summary>
+        /// 載入列表
+        ///
+    </summary>
+    public async Task<TableData>
+        Load(Query{ClassName}ListReq request)
+        {
+        var loginContext = _auth.GetCurrentUser();
+        if (loginContext == null)
+        {
+        throw new CommonException("登錄已過期", Define.INVALID_TOKEN);
+        }
+
+        var columnFields = loginContext.GetTableColumns("{ClassName}");
+        if (columnFields == null || columnFields.Count == 0)
+        {
+        throw new Exception("請在代碼生成界面配置{ClassName}表的欄位屬性");
+        }
+
+        var result = new TableData();
+        var objs = GetDataPrivilege("u");
+        if (!string.IsNullOrEmpty(request.key))
+        {
+        //增加篩選條件,如：
+        //objs = objs.Where(u => u.Name.Contains(request.key));
+        }
+
+        {ForeignKeyTemplate}
+
+        var propertyStr = string.Join(',', columnFields.Select(u => u.ColumnName));
+        result.columnFields = columnFields;
+        result.data = objs.OrderBy(u => u.Id)
+        .Skip((request.page - 1) * request.limit)
+        .Take(request.limit).Select($"new ({propertyStr})");
+        result.count =await objs.CountAsync();
+        return result;
+        }
+
+        public void Add(AddOrUpdate{ClassName}Req obj)
+        {
+        var loginContext = _auth.GetCurrentUser();
+        if (loginContext == null)
+        {
+        throw new CommonException("登錄已過期", Define.INVALID_TOKEN);
+        }
+        //程序類型取入口應用的名稱，可以根據自己需要調整
+        var addObj = obj.MapTo<{ClassName}>
+            ();
+            //addObj.CreateDate = DateTime.Now;
+            //addObj.CreateUserId = loginContext.User.Id;
+            //addObj.CreateUserName = loginContext.User.Name;
+            Repository.Add(addObj);
+            }
+
+            public void Update(AddOrUpdate{ClassName}Req obj)
+            {
+            var loginContext = _auth.GetCurrentUser();
+            if (loginContext == null)
+            {
+            throw new CommonException("登錄已過期", Define.INVALID_TOKEN);
+            }
+            UnitWork.Update<{ClassName}>
+                (u => u.Id == obj.Id, u => new {ClassName}
+                {
+                //todo:要修改的欄位賦值
+                {Attributes}
+                //ModifyDate = DateTime.Now,
+                //ModifyUserId = loginContext.User.Id,
+                //ModifyUserName = loginContext.User.Name;
+                });
+
+                }
+
+                public {ModuleCode}(IUnitWork<donkeymoveDBContext>
+                    unitWork, IRepository<{ClassName},donkeymoveDBContext>
+                        repository, IAuth auth) : base(unitWork, repository, auth)
+                        {
+
+                        }
+                        }
+                        }

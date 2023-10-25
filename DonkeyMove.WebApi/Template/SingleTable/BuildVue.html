@@ -1,0 +1,234 @@
+﻿<template>
+    <div class="flex-column">
+        <sticky :className="'sub-navbar'">
+            <div class="filter-container">
+                <el-input v-model="listQuery.key" @keyup.enter.native="handleFilter()" size="mini" style="width: 200px;" class="filter-item" :placeholder="'請輸入關鍵字'"> </el-input>
+                <el-button @click="handleFilter()" class="filter-item" size="mini" v-waves icon="el-icon-search">搜尋</el-button>
+                <permission-btn size="mini" v-on:btn-event="onBtnClicked"></permission-btn>
+            </div>
+        </sticky>
+
+        <div class="app-container flex-item">
+            <div class="bg-white" style="height: 100%;">
+                <el-table ref="mainTable" :key="tableKey" :data="list" v-loading="listLoading" border fit highlight-current-row style="width: 100%" height="calc(100% - 60px)" @row-click="rowClick" @selection-change="handleSelectionChange">
+                    <el-table-column type="selection" align="center" width="55"> </el-table-column>
+                    {ColumnTable}
+                    <el-table-column min-width="200px" :label="'操作'">
+                        <template slot-scope="scope">
+                            <div class="buttonFlexBox">
+                                <el-button v-if="hasButton('btnEdit')" @click="handleUpdate(scope.row)" size="mini" type="primary">修改</el-button>
+                                <el-button v-if="hasButton('btnDel')" @click="handleDelete([scope.row])" size="mini" type="danger">刪除</el-button>
+                            </div>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <pagination v-show="total > 0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="handleCurrentChange" />
+            </div>
+        </div>
+
+        <el-dialog v-el-drag-dialog class="dialog-mini" width="500px" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" :close-on-click-modal="false" :close-on-press-escape="false">
+            <el-form label-width="100px" :model="temp" :rules="rules" ref="ruleForm">
+                <el-row :gutter="8">
+                    {EditColumn}
+                </el-row>
+            </el-form>
+            <div slot="footer">
+                <el-button @click="dialogFormVisible = false" size="mini">取消</el-button>
+                <el-button v-if="dialogStatus == 'create'" @click="createData()" size="mini" type="primary">確認</el-button>
+                <el-button v-else @click="updateData()" size="mini" type="primary">確認</el-button>
+            </div>
+        </el-dialog>
+    </div>
+</template>
+
+<script>
+    import pbMixins from "@/mixins/permissionBtn.js";
+    import waves from '@/directive/waves' // 水波紋指令
+    import Sticky from '@/components/Sticky'
+    import permissionBtn from '@/components/PermissionBtn'
+    import Pagination from '@/components/Pagination'
+    import elDragDialog from '@/directive/el-dragDialog'
+    import extend from '@/extensions/delRows.js'
+
+    import * as {TableName}s from '@/api/{TableName}s.js'
+
+    const formTemplate = {
+       {ColumnTemp}
+     };
+
+    export default {
+        name: '{TableName}',
+        components: { Sticky, permissionBtn, Pagination },
+        directives: {
+            waves,
+            elDragDialog,
+        },
+        mixins: [pbMixins, extend],
+        data() {
+            return {
+                multipleSelection: [], // 列表checkbox選中的值
+                tableKey: 0,
+                list: null,
+                total: 0,
+                listLoading: true,
+                listQuery: {
+                    page: 1,
+                    limit: 20,
+                    key: undefined,
+                },
+                temp: JSON.parse(JSON.stringify(formTemplate)),
+                rules: {
+                    {RulesColumn}
+        },
+        
+                dialogFormVisible: false,
+                dialogStatus: '',
+                textMap: {
+                    update: '修改',
+                    create: '新增',
+                },
+    }
+        },
+    mounted() {
+        this.getList()
+    },
+    methods: {
+        rowClick(row) {
+            this.$refs.mainTable.clearSelection()
+            this.$refs.mainTable.toggleRowSelection(row)
+        },
+        handleSelectionChange(val) {
+            this.multipleSelection = val
+        },
+        onBtnClicked: function (domId) {
+            switch (domId) {
+                case 'btnAdd':
+                    this.handleCreate()
+                    break
+                case 'btnEdit':
+                    if (this.multipleSelection.length !== 1) {
+                        this.$swal.fire({
+                            title: '只能選中一個進行修改',
+                            icon: 'error',
+                            timer: 2000,
+                            showConfirmButton: false,
+                        })
+                        return
+                    }
+                    this.handleUpdate(this.multipleSelection[0])
+                    break
+                case 'btnDel':
+                    if (this.multipleSelection.length < 1) {
+                        this.$swal.fire({
+                            title: '至少刪除一個',
+                            icon: 'error',
+                            timer: 2000,
+                            showConfirmButton: false,
+                        })
+
+                        return
+                    }
+                    this.handleDelete(this.multipleSelection)
+                    break
+                default:
+                    break
+            }
+        },
+        getList() {
+            this.listLoading = true
+            {TableName}s.getList(this.listQuery).then((response) => {
+                const { data, count } = response;
+                this.list = data
+                this.total = count
+                this.listLoading = false
+            })
+        },
+        handleFilter() {
+            this.listQuery.page = 1
+            this.getList()
+        },
+        handleSizeChange(val) {
+            this.listQuery.limit = val
+            this.getList()
+        },
+        handleCurrentChange(val) {
+            this.listQuery.page = val.page
+            this.listQuery.limit = val.limit
+            this.getList()
+        },
+        resetTemp() {
+            this.temp = JSON.parse(JSON.stringify(formTemplate)) // copy obj
+        },
+        // 彈出新增框
+        handleCreate() {
+            this.resetTemp()
+            this.dialogStatus = 'create'
+            this.dialogFormVisible = true
+            this.$nextTick(() => {
+                this.$refs['ruleForm'].clearValidate()
+            })
+        },
+        // 保存提交
+        createData() {
+            this.$refs['ruleForm'].validate((valid) => {
+                if (valid) {
+                    {TableName}s.add(this.temp).then(() => {
+                        this.list.unshift(this.temp)
+                        this.dialogFormVisible = false
+                        this.$swal.fire({
+                            title: '成功',
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: false,
+                        })
+
+                    })
+                }
+            })
+        },
+        // 彈出修改框
+        async handleUpdate(row) {
+            try {
+               const { result } = await {TableName}s.get({id: row.id});
+               this.temp = result;
+               this.dialogStatus = 'update'
+                this.dialogFormVisible = true
+                this.$nextTick(() => {
+                    this.$refs['ruleForm'].clearValidate()
+                })
+            } catch (error) {
+                console.error(error);
+            }
+        },
+        // 更新提交
+        updateData() {
+            this.$refs['ruleForm'].validate((valid) => {
+                if (valid) {
+                    const tempData = Object.assign({}, this.temp)
+                    {TableName}s.update(tempData).then(() => {
+                        for (const v of this.list) {
+                            if (v.id === this.temp.id) {
+                                const index = this.list.indexOf(v)
+                                this.list.splice(index, 1, this.temp)
+                                break
+                            }
+                        }
+                        this.dialogFormVisible = false
+                        this.$swal.fire({
+                            title: '成功',
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: false,
+                        })
+
+                    })
+                }
+            })
+        },
+        // 多行刪除
+        handleDelete(rows) {
+            this.delrows({TableName}s, rows)
+        },
+    },
+    }
+</script>
