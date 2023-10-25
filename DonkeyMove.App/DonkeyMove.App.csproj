@@ -38,7 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="SocialPractice\Request\" />
     <Folder Include="SocialPractice\Response\" />
   </ItemGroup>
 

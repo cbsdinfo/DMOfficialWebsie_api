@@ -1,4 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using donkeymove.App;
+using donkeymove.App.Interface;
+using donkeymove.App.SocialPractice;
+using donkeymove.App.SocialPractice.Request;
+using donkeymove.Repository.Domain;
+using Infrastructure;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -14,6 +22,13 @@ namespace donkeymove.WebApi.Controllers
 
     public class SocialPracticeUnitController : ControllerBase
     {
+        private readonly SocialPracticeApp _app;
+
+        public SocialPracticeUnitController(IAuth authUtil, SocialPracticeApp app)
+        {
+            _app = app;
+        }
+
         // GET: api/<SocialPracticeController>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -21,17 +36,55 @@ namespace donkeymove.WebApi.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/<SocialPracticeController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        //[HttpGet]
+        //public Response<SocialPractice> Get(string id)
+        //{
+        //    var result = new Response<SocialPractice>();
+        //    try
+        //    {
+        //        result.Result = _app.Get(id);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        result.Code = 500;
+        //        result.Message = ex.InnerException?.Message ?? ex.Message;
+        //    }
+
+        //    return result;
+        //}
+
+        [HttpPost]
+        public Response<string> Add(AddOrUpdateSocialPracticeReq obj)
         {
-            return "value";
+            var resp = new Response<string>();
+            try
+            {
+                _app.Add(obj);
+                resp.Result = obj.Id;
+            }
+            catch (Exception e)
+            {
+                resp.Code = 500;
+                resp.Message = e.Message;
+            }
+            return resp;
         }
 
-        // POST api/<SocialPracticeController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        [AllowAnonymous]
+        public Response Update(AddOrUpdateSocialPracticeReq obj)
         {
+            Response resp = new Response();
+            try
+            {
+                _app.Update(obj);
+            }
+            catch (Exception e)
+            {
+                resp.Code = 500;
+                resp.Message = e.Message;
+            }
+            return resp;
         }
 
         // PUT api/<SocialPracticeController>/5
@@ -40,10 +93,20 @@ namespace donkeymove.WebApi.Controllers
         {
         }
 
-        // DELETE api/<SocialPracticeController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpPost]
+        public Response Delete([FromBody] string[] ids)
         {
+            Response resp = new Response();
+            try
+            {
+                _app.Delete(ids);
+            }
+            catch (Exception e)
+            {
+                resp.Code = 500;
+                resp.Message = e.Message;
+            }
+            return resp;
         }
     }
 }
