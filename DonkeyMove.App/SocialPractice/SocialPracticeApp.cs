@@ -28,13 +28,15 @@ namespace donkeymove.App.SocialPractice
         }
 
 
-        public void Add(AddOrUpdateSocialPracticeReq socialPractice)
+        public string Add(AddOrUpdateSocialPracticeReq socialPractice)
         {
             var obj = socialPractice.MapTo<Repository.Domain.SocialPractice>();
+            obj.GenerateDefaultKeyVal();
             obj.CreateTime = DateTime.Now;
             var user = _auth.GetCurrentUser().User;
             obj.CreateId = user.Id;            
             Repository.Add(obj);
+            return obj.Id;
         }
 
         public void Update(AddOrUpdateSocialPracticeReq socialPractice)

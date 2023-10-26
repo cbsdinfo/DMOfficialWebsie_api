@@ -54,7 +54,7 @@ namespace donkeymove.WebApi.Controllers
         //}
 
         [HttpPost]
-        public Response<string> Add(AddOrUpdateSocialPracticeReq obj)
+        public Response<string> Add([FromBody]AddOrUpdateSocialPracticeReq obj)
         {
             var resp = new Response<string>();
             try
