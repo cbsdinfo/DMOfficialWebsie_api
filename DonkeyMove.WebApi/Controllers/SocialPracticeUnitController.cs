@@ -1,9 +1,9 @@
-﻿using donkeymove.App;
-using donkeymove.App.Interface;
+﻿using donkeymove.App.Interface;
 using donkeymove.App.SocialPractice;
 using donkeymove.App.SocialPractice.Request;
 using donkeymove.Repository.Domain;
 using Infrastructure;
+using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -29,38 +29,57 @@ namespace donkeymove.WebApi.Controllers
             _app = app;
         }
 
-        // GET: api/<SocialPracticeController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
+        //// GET: api/<SocialPracticeController>
         //[HttpGet]
-        //public Response<SocialPractice> Get(string id)
+        //public IEnumerable<string> Get()
         //{
-        //    var result = new Response<SocialPractice>();
-        //    try
-        //    {
-        //        result.Result = _app.Get(id);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        result.Code = 500;
-        //        result.Message = ex.InnerException?.Message ?? ex.Message;
-        //    }
-
-        //    return result;
+        //    return new string[] { "value1", "value2" };
         //}
 
+        [HttpGet]
+        [AllowAnonymous]
+        public Response<SocialPractice> Get(string id)
+        {
+            var result = new Response<SocialPractice>();
+            try
+            {
+                result.Result = _app.Get(id);
+            }
+            catch (Exception ex)
+            {
+                result.Code = 500;
+                result.Message = ex.InnerException?.Message ?? ex.Message;
+            }
+
+            return result;
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public Response<List<SocialPractice>> GetList()
+        {
+            var result = new Response<List<SocialPractice>>();
+            try
+            {
+                var obj = _app.GetList();
+                result.Result = obj;
+            }
+            catch (Exception ex)
+            {
+                result.Code = 500;
+                result.Message = ex.InnerException?.Message ?? ex.Message;
+            }
+
+            return result;
+        }
+
         [HttpPost]
-        public Response<string> Add([FromBody]AddOrUpdateSocialPracticeReq obj)
+        public Response<string> Add([FromBody] AddOrUpdateSocialPracticeReq obj)
         {
             var resp = new Response<string>();
             try
-            {
-                _app.Add(obj);
-                resp.Result = obj.Id;
+            {                
+                resp.Result = _app.Add(obj);
             }
             catch (Exception e)
             {
@@ -71,8 +90,7 @@ namespace donkeymove.WebApi.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
-        public Response Update(AddOrUpdateSocialPracticeReq obj)
+        public Response Update([FromBody] AddOrUpdateSocialPracticeReq obj)
         {
             Response resp = new Response();
             try

@@ -57,5 +57,10 @@ namespace donkeymove.App.SocialPractice
                 //todo:要修改的字段賦值
             });
         }
+
+        public List<Repository.Domain.SocialPractice> GetList()
+        {
+            return UnitWork.Find<Repository.Domain.SocialPractice>(null).ToList();
+        }
     }
 }
