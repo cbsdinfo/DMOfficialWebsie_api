@@ -104,13 +104,7 @@ namespace donkeymove.WebApi.Controllers
             }
             return resp;
         }
-
-        // PUT api/<SocialPracticeController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
+        
         [HttpPost]
         public Response Delete([FromBody] string[] ids)
         {
