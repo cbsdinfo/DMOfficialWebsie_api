@@ -56,13 +56,13 @@ namespace donkeymove.WebApi.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public Response<List<SocialPractice>> GetList()
+        public Response<List<SocialPractice>> GetList([FromQuery] QuerySocialPracticeListReq obj)
         {
             var result = new Response<List<SocialPractice>>();
             try
             {
-                var obj = _app.GetList();
-                result.Result = obj;
+                var res = _app.GetList(obj);
+                result.Result = res;
             }
             catch (Exception ex)
             {

@@ -9,8 +9,38 @@ namespace donkeymove.App.SocialPractice.Request
     public class QuerySocialPracticeListReq
     {
         /// <summary>
-        /// 流水號
-        /// </summary>
-        public string Id { get; set; }
+        /// 標題名稱
+        /// </summary>        
+        public string Title { get; set; }
+
+        /// <summary>
+        /// 影片摘要
+        /// </summary>        
+        public string Abstract { get; set; }
+
+        /// <summary>
+        /// 首頁區塊小標1
+        /// </summary>        
+        public string SubTitle1 { get; set; }
+
+        /// <summary>
+        /// 首頁區塊小標2
+        /// </summary>        
+        public string SubTitle2 { get; set; }
+
+        /// <summary>
+        /// 首頁區塊小標3
+        /// </summary>        
+        public string SubTitle3 { get; set; }
+
+        /// <summary>
+        /// 是否顯示於首頁
+        /// </summary>        
+        public int? Display { get; set; }
+
+        /// <summary>
+        /// 是否顯示於首頁
+        /// </summary>        
+        public int? Status { get; set; }
     }
 }

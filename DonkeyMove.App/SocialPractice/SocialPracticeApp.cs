@@ -58,9 +58,42 @@ namespace donkeymove.App.SocialPractice
             });
         }
 
-        public List<Repository.Domain.SocialPractice> GetList()
+        public List<Repository.Domain.SocialPractice> GetList(QuerySocialPracticeListReq obj)
         {
-            return UnitWork.Find<Repository.Domain.SocialPractice>(null).ToList();
+            var result = UnitWork.Find<Repository.Domain.SocialPractice>(null);
+
+            if (!obj.Title.IsNullOrEmpty())
+            {
+                result = result.Where(s => s.Title.IndexOf(obj.Title) != -1);    
+            }
+
+            if (!obj.Abstract.IsNullOrEmpty())
+            {
+                result = result.Where(s => s.Abstract.IndexOf(obj.Abstract) != -1);
+            }
+
+            if (!obj.SubTitle1.IsNullOrEmpty())
+            {
+                result = result.Where(s => s.SubTitle1.IndexOf(obj.SubTitle1) != -1);
+            }
+
+            if (!obj.SubTitle2.IsNullOrEmpty())
+            {
+                result = result.Where(s => s.SubTitle2.IndexOf(obj.SubTitle2) != -1);
+            }
+            if (!obj.SubTitle3.IsNullOrEmpty())
+            {
+                result = result.Where(s => s.SubTitle3.IndexOf(obj.SubTitle3) != -1);
+            }
+            if (obj.Display != null)
+            {
+                result = result.Where(s => s.Display.Equals(obj.Display));
+            }
+            if(obj.Status != null)
+            {
+                result = result.Where(s=> s.Status.Equals(obj.Status));
+            }            
+            return result.ToList();
         }
     }
 }
