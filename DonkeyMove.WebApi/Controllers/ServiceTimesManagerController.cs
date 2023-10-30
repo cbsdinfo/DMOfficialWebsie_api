@@ -1,40 +1,38 @@
-﻿using donkeymove.App.Interface;
-using donkeymove.App.ServiceTimes.Request;
+﻿using donkeymove.App.SocialPractice.Request;
 using donkeymove.App.SocialPractice;
-using donkeymove.App.SocialPractice.Request;
 using donkeymove.Repository.Domain;
 using Infrastructure;
-using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using donkeymove.App.ServiceTimes;
+using donkeymove.App.ServiceTimes.Request;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace donkeymove.WebApi.Controllers
 {
     /// <summary>
-    /// 社會實踐單元管理
+    /// 首頁服務次數管理
     /// </summary>
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [ApiExplorerSettings(GroupName = "社會實踐單元_SocialPracticeUnit")]
-
-    public class SocialPracticeUnitController : ControllerBase
+    [ApiExplorerSettings(GroupName = "首頁服務次數管理_ServiceTimesManager")]
+    public class ServiceTimesManagerController : ControllerBase
     {
-        private readonly SocialPracticeApp _app;
+        private readonly ServiceTimesApp _app;
 
-        public SocialPracticeUnitController(SocialPracticeApp app)
+        public ServiceTimesManagerController(ServiceTimesApp app)
         {
             _app = app;
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public Response<SocialPractice> Get(string id)
+        public Response<ServiceTimes> Get(string id)
         {
-            var result = new Response<SocialPractice>();
+            var result = new Response<ServiceTimes>();
             try
             {
                 result.Result = _app.Get(id);
@@ -50,9 +48,9 @@ namespace donkeymove.WebApi.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public Response<List<SocialPractice>> GetList([FromQuery] QuerySocialPracticeListReq obj)
+        public Response<List<ServiceTimes>> GetList([FromQuery] QueryServiceTimesListReq obj)
         {
-            var result = new Response<List<SocialPractice>>();
+            var result = new Response<List<ServiceTimes>>();
             try
             {
                 var res = _app.GetList(obj);
@@ -68,11 +66,11 @@ namespace donkeymove.WebApi.Controllers
         }
 
         [HttpPost]
-        public Response<string> Add([FromBody] AddOrUpdateSocialPracticeReq obj)
+        public Response<string> Add([FromBody] AddServiceTimesReq obj)
         {
             var resp = new Response<string>();
             try
-            {                
+            {
                 resp.Result = _app.Add(obj);
             }
             catch (Exception e)
@@ -84,7 +82,7 @@ namespace donkeymove.WebApi.Controllers
         }
 
         [HttpPost]
-        public Response Update([FromBody] AddOrUpdateSocialPracticeReq obj)
+        public Response Update([FromBody] UpdateServiceTimesReq obj)
         {
             Response resp = new Response();
             try
@@ -98,7 +96,7 @@ namespace donkeymove.WebApi.Controllers
             }
             return resp;
         }
-        
+
         [HttpPost]
         public Response Delete([FromBody] string[] ids)
         {

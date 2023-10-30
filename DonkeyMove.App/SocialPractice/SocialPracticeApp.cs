@@ -13,18 +13,15 @@ using donkeymove.Repository;
 using donkeymove.Repository.Domain;
 using donkeymove.Repository.Interface;
 using donkeymove.App.SocialPractice.Request;
+using donkeymove.App.ServiceTimes.Request;
 
 namespace donkeymove.App.SocialPractice
 {
     public class SocialPracticeApp : BaseStringApp<Repository.Domain.SocialPractice, donkeymoveDBContext>
     {
-        private RevelanceManagerApp _revelanceApp;
-
         public SocialPracticeApp(IUnitWork<donkeymoveDBContext> unitWork, IRepository<Repository.Domain.SocialPractice, donkeymoveDBContext> repository, 
-            RevelanceManagerApp app, IAuth auth) : base(unitWork, repository, auth)
+            IAuth auth) : base(unitWork, repository, auth)
         {
-            _revelanceApp = app;
-
         }
 
 
@@ -34,7 +31,8 @@ namespace donkeymove.App.SocialPractice
             obj.GenerateDefaultKeyVal();
             obj.CreateTime = DateTime.Now;
             var user = _auth.GetCurrentUser().User;
-            obj.CreateId = user.Id;            
+            obj.CreateId = user.Id;
+            obj.UpdateId = user.Id;
             Repository.Add(obj);
             return obj.Id;
         }
@@ -92,7 +90,10 @@ namespace donkeymove.App.SocialPractice
             if(obj.Status != null)
             {
                 result = result.Where(s=> s.Status.Equals(obj.Status));
-            }            
+            }
+
+            result = result.OrderByDescending(s => s.CreateTime);
+
             return result.ToList();
         }
     }

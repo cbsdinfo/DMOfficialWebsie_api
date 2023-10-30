@@ -36,11 +36,11 @@ namespace donkeymove.App.SocialPractice.Request
         /// <summary>
         /// 是否顯示於首頁
         /// </summary>        
-        public int? Display { get; set; }
+        public bool? Display { get; set; }
 
         /// <summary>
         /// 是否顯示於首頁
         /// </summary>        
-        public int? Status { get; set; }
+        public bool? Status { get; set; }
     }
 }

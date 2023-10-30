@@ -52,14 +52,14 @@ namespace donkeymove.App.SocialPractice.Request
         /// <summary>
         /// 是否顯示於首頁
         /// </summary>
-        /// <example>1</example>
-        public int Display { get; set; }
+        /// <example>true</example>
+        public bool Display { get; set; }
 
         /// <summary>
         /// 是否顯示於首頁
         /// </summary>
-        /// <example>1</example>
-        public int Status { get; set; }
+        /// <example>true</example>
+        public bool Status { get; set; }
 
     }
 }
