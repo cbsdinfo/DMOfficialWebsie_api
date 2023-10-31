@@ -41,7 +41,6 @@ namespace donkeymove.App
         public string Add(AddOrUpdateCategoryTypeReq req)
         {
             var obj = req.MapTo<CategoryType>();
-            if (obj.KeyIsNull()) obj.GenerateDefaultKeyVal();
             //todo:補充或調整自己需要的字段
             obj.CreateTime = DateTime.Now;
             var user = _auth.GetCurrentUser().User;

@@ -24,7 +24,6 @@ namespace donkeymove.App.ServiceTimes
         public string Add(AddServiceTimesReq serviceTimes)
         {
             var obj = serviceTimes.MapTo<Repository.Domain.ServiceTimes>();
-            if (obj.KeyIsNull()) obj.GenerateDefaultKeyVal();
             obj.CreateTime = DateTime.Now;
             var user = _auth.GetCurrentUser().User;
             obj.CreateUserId = user.Id;

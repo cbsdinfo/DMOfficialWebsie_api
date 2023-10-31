@@ -28,7 +28,6 @@ namespace donkeymove.App.SocialPractice
         public string Add(AddOrUpdateSocialPracticeReq socialPractice)
         {
             var obj = socialPractice.MapTo<Repository.Domain.SocialPractice>();
-            if (obj.KeyIsNull()) obj.GenerateDefaultKeyVal();
             obj.CreateTime = DateTime.Now;
             var user = _auth.GetCurrentUser().User;
             obj.CreateUserId = user.Id;

@@ -57,7 +57,6 @@ namespace donkeymove.App
         public string Add(AddOrUpdateCategoryReq req)
         {
             var obj = req.MapTo<Category>();
-            if (obj.KeyIsNull()) obj.GenerateDefaultKeyVal();
             obj.CreateTime = DateTime.Now;
             var user = _auth.GetCurrentUser().User;
             obj.CreateUserId = user.Id;
