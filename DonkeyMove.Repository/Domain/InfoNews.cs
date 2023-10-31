@@ -1,26 +1,26 @@
+﻿using donkeymove.Repository.Core;
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
-using donkeymove.Repository.Core;
 
 namespace donkeymove.Repository.Domain
 {
     /// <summary>
-    /// 社會實踐單元管理
+    /// 首頁服務次數管理
     /// </summary>
-    [Table("SocialPractice")]
-    public partial class SocialPractice : StringEntity
+    [Table("InfoNews")]
+    public partial class InfoNews : StringEntity
     {
-        public SocialPractice()
-        {
+        public InfoNews() {
+
+            this.ClInfoNewsType = string.Empty;
+            this.ReleaseTime = DateTime.Now;
+            this.ImagePath = string.Empty;
             this.Title = string.Empty;
-            this.YoutubeUrl = string.Empty;
-            this.Abstract = string.Empty;
-            this.SubTitle1 = string.Empty;
-            this.SubTitle2 = string.Empty;
-            this.SubTitle3 = string.Empty;
-            this.Display = true;
-            this.Status = true;
+            this.Content = string.Empty;
+            this.Link = string.Empty;
+            this.PhotoAuthorPath = string.Empty;
+            this.AboutAuthor = string.Empty;
             this.CreateTime = DateTime.Now;
             this.CreateUserId = string.Empty;
             this.UpdateTime = DateTime.Now;
@@ -28,46 +28,52 @@ namespace donkeymove.Repository.Domain
         }
 
         /// <summary>
-        /// 標題名稱
+        /// 文章類別 參考 CategoryType.Name = InfoNewsType
         /// </summary>
-        [Description("標題名稱")]
+        [Description("文章類別")]
+        public string ClInfoNewsType { get; set; }
+
+        /// <summary>
+        /// 發布日期
+        /// </summary>
+        [Description("發布日期")]
+        public DateTime ReleaseTime { get; set; }
+
+        /// <summary>
+        /// 圖片路徑
+        /// </summary>
+        [Description("圖片路徑")]
+        public string ImagePath { get; set; }
+
+        /// <summary>
+        /// 標題
+        /// </summary>
+        [Description("標題")]
         public string Title { get; set; }
 
         /// <summary>
-        /// Youtube連結
+        /// 文章內容
         /// </summary>
-        [Description("Youtube連結")]
-        public string YoutubeUrl { get; set; }
+        [Description("文章內容")]
+        public string Content { get; set; }
 
         /// <summary>
-        /// 影片摘要
+        /// 連結
         /// </summary>
-        [Description("影片摘要")]
-        public string Abstract { get; set; }
+        [Description("連結")]
+        public string Link { get; set; }
 
         /// <summary>
-        /// 首頁區塊小標1
+        /// 作者照片
         /// </summary>
-        [Description("首頁區塊小標1")]
-        public string SubTitle1 { get; set; }
+        [Description("作者照片")]
+        public string PhotoAuthorPath { get; set; }
 
         /// <summary>
-        /// 首頁區塊小標2
+        /// 作者介紹
         /// </summary>
-        [Description("首頁區塊小標2")]
-        public string SubTitle2 { get; set; }
-
-        /// <summary>
-        /// 首頁區塊小標3
-        /// </summary>
-        [Description("首頁區塊小標3")]
-        public string SubTitle3 { get; set; }
-
-        /// <summary>
-        /// 是否顯示於首頁
-        /// </summary>
-        [Description("是否顯示於首頁")]
-        public bool Display { get; set; }
+        [Description("作者介紹")]
+        public string AboutAuthor { get; set; }
 
         /// <summary>
         /// 狀態（是否顯示於前台）

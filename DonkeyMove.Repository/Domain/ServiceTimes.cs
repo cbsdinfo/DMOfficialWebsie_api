@@ -1,11 +1,7 @@
 ﻿using donkeymove.Repository.Core;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace donkeymove.Repository.Domain
 {
@@ -13,7 +9,7 @@ namespace donkeymove.Repository.Domain
     /// 首頁服務次數管理
     /// </summary>
     [Table("ServiceTimes")]
-    public class ServiceTimes : StringEntity
+    public partial class ServiceTimes : StringEntity
     {
         public ServiceTimes() {
             this.ServiceName = string.Empty;

@@ -1,13 +1,11 @@
-﻿using donkeymove.App.SocialPractice.Request;
-using donkeymove.App.SocialPractice;
+﻿using donkeymove.App;
+using donkeymove.App.Request;
 using donkeymove.Repository.Domain;
 using Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using donkeymove.App.ServiceTimes;
-using donkeymove.App.ServiceTimes.Request;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Castle.Core.Internal;
-using Infrastructure;
-using Infrastructure.Extensions;
-using Microsoft.EntityFrameworkCore;
-using donkeymove.App.Interface;
+﻿using donkeymove.App.Interface;
 using donkeymove.App.Request;
-using donkeymove.App.Response;
 using donkeymove.Repository;
 using donkeymove.Repository.Domain;
 using donkeymove.Repository.Interface;
-using donkeymove.App.SocialPractice.Request;
-using donkeymove.App.ServiceTimes.Request;
+using Infrastructure;
+using Infrastructure.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace donkeymove.App.SocialPractice
+namespace donkeymove.App
 {
-    public class SocialPracticeApp : BaseStringApp<Repository.Domain.SocialPractice, donkeymoveDBContext>
+    public class SocialPracticeApp : BaseStringApp<SocialPractice, donkeymoveDBContext>
     {
-        public SocialPracticeApp(IUnitWork<donkeymoveDBContext> unitWork, IRepository<Repository.Domain.SocialPractice, donkeymoveDBContext> repository, 
+        public SocialPracticeApp(IUnitWork<donkeymoveDBContext> unitWork, IRepository<SocialPractice, donkeymoveDBContext> repository, 
             IAuth auth) : base(unitWork, repository, auth)
         {
         }

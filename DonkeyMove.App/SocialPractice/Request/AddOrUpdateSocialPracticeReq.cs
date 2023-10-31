@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace donkeymove.App.SocialPractice.Request
+namespace donkeymove.App.Request
 {
     public class AddOrUpdateSocialPracticeReq
     {

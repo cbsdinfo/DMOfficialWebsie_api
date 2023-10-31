@@ -1,8 +1,9 @@
 ﻿using donkeymove.App.Interface;
-using donkeymove.App.ServiceTimes.Request;
-using donkeymove.App.SocialPractice.Request;
+using donkeymove.App.Request;
+using donkeymove.App.Request;
 using donkeymove.Repository;
 using donkeymove.Repository.Interface;
+using donkeymove.Repository.Domain;
 using Infrastructure;
 using Infrastructure.Extensions;
 using System;
@@ -11,9 +12,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace donkeymove.App.ServiceTimes
+namespace donkeymove.App
 {
-    public class ServiceTimesApp : BaseStringApp<Repository.Domain.ServiceTimes, donkeymoveDBContext>
+    public class ServiceTimesApp : BaseStringApp<ServiceTimes, donkeymoveDBContext>
     {
         public ServiceTimesApp(IUnitWork<donkeymoveDBContext> unitWork, IRepository<Repository.Domain.ServiceTimes, 
             donkeymoveDBContext> repository, IAuth auth) : base(unitWork, repository, auth)

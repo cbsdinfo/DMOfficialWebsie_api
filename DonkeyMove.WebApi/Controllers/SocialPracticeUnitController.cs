@@ -1,10 +1,7 @@
-﻿using donkeymove.App.Interface;
-using donkeymove.App.ServiceTimes.Request;
-using donkeymove.App.SocialPractice;
-using donkeymove.App.SocialPractice.Request;
+﻿using donkeymove.App;
+using donkeymove.App.Request;
 using donkeymove.Repository.Domain;
 using Infrastructure;
-using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
