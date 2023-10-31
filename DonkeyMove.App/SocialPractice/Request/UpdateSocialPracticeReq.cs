@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace donkeymove.App.Request
 {
-    public class AddSocialPracticeReq
+    public class UpdateSocialPracticeReq
     {
+        /// <summary>
+        /// 流水號
+        /// </summary>
+        public string Id { get; set; }
+
         /// <summary>
         /// 標題名稱
         /// </summary>

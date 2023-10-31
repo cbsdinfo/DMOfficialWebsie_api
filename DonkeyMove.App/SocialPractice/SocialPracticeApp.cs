@@ -1,5 +1,6 @@
 ﻿using donkeymove.App.Interface;
 using donkeymove.App.Request;
+using donkeymove.App.Response;
 using donkeymove.Repository;
 using donkeymove.Repository.Domain;
 using donkeymove.Repository.Interface;
@@ -19,9 +20,29 @@ namespace donkeymove.App
         }
 
 
-        public string Add(AddOrUpdateSocialPracticeReq socialPractice)
+        public SocialPracticeResp GetById(string id)
         {
-            var obj = socialPractice.MapTo<Repository.Domain.SocialPractice>();
+            var result = UnitWork.Find<SocialPractice>(u => u.Id == id).Select(x => new SocialPracticeResp
+            {
+                Id = x.Id,                
+                Title = x.Title,
+                YoutubeUrl = x.YoutubeUrl,
+                Abstract = x.Abstract,
+                SubTitle1 = x.SubTitle1,
+                SubTitle2 = x.SubTitle2,
+                SubTitle3 = x.SubTitle3,
+                Display = x.Display,
+                UpdateTime = x.UpdateTime,
+                UpdateUserId = x.UpdateUserId,
+                CreateTime = x.CreateTime,
+                CreateUserId = x.CreateUserId
+            }).FirstOrDefault();
+            return result;
+        }
+
+        public string Add(AddSocialPracticeReq request)
+        {
+            var obj = request.MapTo<SocialPractice>();
             obj.CreateTime = DateTime.Now;
             var user = _auth.GetCurrentUser().User;
             obj.CreateUserId = user.Id;
@@ -30,28 +51,28 @@ namespace donkeymove.App
             return obj.Id;
         }
 
-        public void Update(AddOrUpdateSocialPracticeReq socialPractice)
+        public void Update(UpdateSocialPracticeReq request)
         {
             var user = _auth.GetCurrentUser().User;
-            UnitWork.Update<Repository.Domain.SocialPractice>(u => u.Id == socialPractice.Id, u => new Repository.Domain.SocialPractice
+            UnitWork.Update<SocialPractice>(u => u.Id == request.Id, u => new SocialPractice
             {
-                Title = socialPractice.Title,
-                YoutubeUrl = socialPractice.YoutubeUrl,
-                Abstract = socialPractice.Abstract,
-                SubTitle1 = socialPractice.SubTitle1,
-                SubTitle2 = socialPractice.SubTitle2,
-                SubTitle3 = socialPractice.SubTitle3,
-                Display = socialPractice.Display,
-                Status = socialPractice.Status,
+                Title = request.Title,
+                YoutubeUrl = request.YoutubeUrl,
+                Abstract = request.Abstract,
+                SubTitle1 = request.SubTitle1,
+                SubTitle2 = request.SubTitle2,
+                SubTitle3 = request.SubTitle3,
+                Display = request.Display,
+                Status = request.Status,
                 UpdateTime = DateTime.Now,
                 UpdateUserId = user.Id,
                 //todo:要修改的字段賦值
             });
         }
 
-        public List<Repository.Domain.SocialPractice> GetList(QuerySocialPracticeListReq obj)
+        public List<SocialPracticeListResp> GetList(QuerySocialPracticeListReq obj)
         {
-            var result = UnitWork.Find<Repository.Domain.SocialPractice>(null);
+            var result = UnitWork.Find<SocialPractice>(null);
 
             if (!obj.Title.IsNullOrEmpty())
             {
@@ -87,7 +108,21 @@ namespace donkeymove.App
 
             result = result.OrderByDescending(s => s.CreateTime);
 
-            return result.ToList();
+
+            return result.Select(x => new SocialPracticeListResp() { 
+                Id = x.Id,
+                Title = x.Title,
+                YoutubeUrl = x.YoutubeUrl,
+                Abstract = x.Abstract,
+                SubTitle1 = x.SubTitle1,
+                SubTitle2 = x.SubTitle2,
+                SubTitle3 = x.SubTitle3,
+                Display = x.Display,
+                UpdateTime = x.UpdateTime,
+                UpdateUserId = x.UpdateUserId,
+                CreateTime = x.CreateTime,
+                CreateUserId = x.CreateUserId
+            }).ToList();
         }
     }
 }

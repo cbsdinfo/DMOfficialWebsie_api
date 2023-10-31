@@ -1,5 +1,6 @@
 ﻿using donkeymove.App;
 using donkeymove.App.Request;
+using donkeymove.App.Response;
 using donkeymove.Repository.Domain;
 using Infrastructure;
 using Microsoft.AspNetCore.Authorization;
@@ -29,12 +30,12 @@ namespace donkeymove.WebApi.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public Response<SocialPractice> Get(string id)
+        public Response<SocialPracticeResp> Get(string id)
         {
-            var result = new Response<SocialPractice>();
+            var result = new Response<SocialPracticeResp>();
             try
             {
-                result.Result = _app.Get(id);
+                result.Result = _app.GetById(id);
             }
             catch (Exception ex)
             {
@@ -47,9 +48,9 @@ namespace donkeymove.WebApi.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public Response<List<SocialPractice>> GetList([FromQuery] QuerySocialPracticeListReq obj)
+        public Response<List<SocialPracticeListResp>> GetList([FromQuery] QuerySocialPracticeListReq obj)
         {
-            var result = new Response<List<SocialPractice>>();
+            var result = new Response<List<SocialPracticeListResp>>();
             try
             {
                 var res = _app.GetList(obj);
@@ -65,7 +66,7 @@ namespace donkeymove.WebApi.Controllers
         }
 
         [HttpPost]
-        public Response<string> Add([FromBody] AddOrUpdateSocialPracticeReq obj)
+        public Response<string> Add([FromBody] AddSocialPracticeReq obj)
         {
             var resp = new Response<string>();
             try
@@ -81,7 +82,7 @@ namespace donkeymove.WebApi.Controllers
         }
 
         [HttpPost]
-        public Response Update([FromBody] AddOrUpdateSocialPracticeReq obj)
+        public Response Update([FromBody] UpdateSocialPracticeReq obj)
         {
             Response resp = new Response();
             try
