@@ -19,9 +19,9 @@ namespace donkeymove.Repository.Domain
             this.ServiceName = string.Empty;
             this.NumberTimes = string.Empty;            
             this.CreateTime = DateTime.Now;
-            this.CreateId = string.Empty;
+            this.CreateUserId = string.Empty;
             this.UpdateTime = DateTime.Now;
-            this.UpdateId = string.Empty;
+            this.UpdateUserId = string.Empty;
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace donkeymove.Repository.Domain
         /// 創建人
         /// </summary>
         [Description("創建人ID")]
-        public string CreateId { get; set; }
+        public string CreateUserId { get; set; }
 
         /// <summary>
         /// 創建時間
@@ -58,6 +58,6 @@ namespace donkeymove.Repository.Domain
         /// 創建人
         /// </summary>
         [Description("修改人ID")]
-        public string UpdateId { get; set; }
+        public string UpdateUserId { get; set; }
     }
 }

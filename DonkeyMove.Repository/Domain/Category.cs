@@ -19,13 +19,10 @@ namespace donkeymove.Repository.Domain
             this.SortNo = 0;
             this.Description = string.Empty;
             this.TypeId = string.Empty;
-            this.TypeName = string.Empty;
             this.CreateTime = DateTime.Now;
             this.CreateUserId = string.Empty;
-            this.CreateUserName = string.Empty;
             this.UpdateTime = DateTime.Now;
             this.UpdateUserId = string.Empty;
-            this.UpdateUserName = string.Empty;
         }
 
         /// <summary>
@@ -70,11 +67,6 @@ namespace donkeymove.Repository.Domain
         [Description("分類標識")]
         public string TypeId { get; set; }
 
-        /// <summary>
-        /// 分類
-        /// </summary>
-        [Description("分類")]
-        public string TypeName { get; set; }
 
         /// <summary>
         /// 創建時間
@@ -90,12 +82,6 @@ namespace donkeymove.Repository.Domain
         public string CreateUserId { get; set; }
 
         /// <summary>
-        /// 創建人
-        /// </summary>
-        [Description("創建人")]
-        public string CreateUserName { get; set; }
-
-        /// <summary>
         /// 最后更新時間
         /// </summary>
         [Description("最后更新時間")]
@@ -107,11 +93,6 @@ namespace donkeymove.Repository.Domain
         [Description("最后更新人ID")]
         [Browsable(false)]
         public string UpdateUserId { get; set; }
-
-        /// <summary>
-        /// 最后更新人
-        /// </summary>
-        [Description("最后更新人")]
-        public string UpdateUserName { get; set; }
+        
     }
 }

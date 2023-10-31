@@ -6,6 +6,8 @@ using donkeymove.App;
 using donkeymove.App.Request;
 using donkeymove.App.Response;
 using donkeymove.Repository.Domain;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace donkeymove.WebApi.Controllers
 {
@@ -18,7 +20,7 @@ namespace donkeymove.WebApi.Controllers
     public class CategorysController : ControllerBase
     {
         private readonly CategoryApp _app;
-        
+
         /// <summary>
         /// 獲取分類詳情
         /// </summary>
@@ -42,16 +44,40 @@ namespace donkeymove.WebApi.Controllers
         }
 
         /// <summary>
+        /// 獲取分類集合 By TypdId
+        /// </summary>
+        /// <param name="TypeId">分類id</param>
+        /// <returns></returns>
+        [HttpGet]
+        [AllowAnonymous]
+        public Response<List<Category>> LoadByTypeId(string TypeId)
+        {
+            var result = new Response<List<Category>>();
+            try
+            {
+                result.Result = _app.LoadByTypeId(TypeId);
+            }
+            catch (Exception ex)
+            {
+                result.Code = 500;
+                result.Message = ex.InnerException?.Message ?? ex.Message;
+            }
+
+            return result;
+        }
+        
+
+        /// <summary>
         /// 添加分類
         /// </summary>
         /// <returns></returns>
-       [HttpPost]
-        public Response Add(AddOrUpdateCategoryReq obj)
+        [HttpPost]
+        public Response<string> Add([FromBody] AddOrUpdateCategoryReq obj)
         {
-            var result = new Response();
+            var result = new Response<string>();
             try
             {
-                _app.Add(obj);
+                result.Result = _app.Add(obj);
 
             }
             catch (Exception ex)
@@ -67,7 +93,7 @@ namespace donkeymove.WebApi.Controllers
         /// 修改分類（字典）
         /// </summary>
         /// <returns></returns>
-       [HttpPost]
+        [HttpPost]
         public Response Update(AddOrUpdateCategoryReq obj)
         {
             var result = new Response();
@@ -85,11 +111,12 @@ namespace donkeymove.WebApi.Controllers
             return result;
         }
 
+
         /// <summary>
         /// 加載列表
         /// </summary>
         [HttpGet]
-        public async Task<TableData> Load([FromQuery]QueryCategoryListReq request)
+        public async Task<TableData> Load([FromQuery] QueryCategoryListReq request)
         {
             return await _app.Load(request);
         }
@@ -97,8 +124,8 @@ namespace donkeymove.WebApi.Controllers
         /// <summary>
         /// 批量刪除
         /// </summary>
-       [HttpPost]
-        public Response Delete([FromBody]string[] ids)
+        [HttpPost]
+        public Response Delete([FromBody] string[] ids)
         {
             var result = new Response();
             try
@@ -115,7 +142,7 @@ namespace donkeymove.WebApi.Controllers
             return result;
         }
 
-        public CategorysController(CategoryApp app) 
+        public CategorysController(CategoryApp app)
         {
             _app = app;
         }

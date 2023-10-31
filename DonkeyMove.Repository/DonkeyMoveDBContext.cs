@@ -81,6 +81,8 @@ namespace donkeymove.Repository
 
         public virtual DbSet<ServiceTimes> ServiceTimes { get; set; }
 
+        public virtual DbSet<InfoNews> InfoNews { get; set; }
+
         //非數據庫表格
         public virtual DbSet<QueryStringObj> QueryStringObjs { get; set; }
 

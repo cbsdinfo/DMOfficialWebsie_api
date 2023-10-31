@@ -28,11 +28,11 @@ namespace donkeymove.App.SocialPractice
         public string Add(AddOrUpdateSocialPracticeReq socialPractice)
         {
             var obj = socialPractice.MapTo<Repository.Domain.SocialPractice>();
-            obj.GenerateDefaultKeyVal();
+            if (obj.KeyIsNull()) obj.GenerateDefaultKeyVal();
             obj.CreateTime = DateTime.Now;
             var user = _auth.GetCurrentUser().User;
-            obj.CreateId = user.Id;
-            obj.UpdateId = user.Id;
+            obj.CreateUserId = user.Id;
+            obj.UpdateUserId = user.Id;
             Repository.Add(obj);
             return obj.Id;
         }
@@ -51,7 +51,7 @@ namespace donkeymove.App.SocialPractice
                 Display = socialPractice.Display,
                 Status = socialPractice.Status,
                 UpdateTime = DateTime.Now,
-                UpdateId = user.Id,
+                UpdateUserId = user.Id,
                 //todo:要修改的字段賦值
             });
         }

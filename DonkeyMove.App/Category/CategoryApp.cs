@@ -10,7 +10,7 @@ using donkeymove.App.Response;
 using donkeymove.Repository;
 using donkeymove.Repository.Domain;
 using donkeymove.Repository.Interface;
-
+using Infrastructure.Test;
 
 namespace donkeymove.App
 {
@@ -54,14 +54,15 @@ namespace donkeymove.App
             return result;
         }
 
-        public void Add(AddOrUpdateCategoryReq req)
+        public string Add(AddOrUpdateCategoryReq req)
         {
             var obj = req.MapTo<Category>();
+            if (obj.KeyIsNull()) obj.GenerateDefaultKeyVal();
             obj.CreateTime = DateTime.Now;
             var user = _auth.GetCurrentUser().User;
             obj.CreateUserId = user.Id;
-            obj.CreateUserName = user.Name;
             Repository.Add(obj);
+            return obj.Id;
         }
         
         public void Update(AddOrUpdateCategoryReq obj)
@@ -74,8 +75,7 @@ namespace donkeymove.App
                 DtCode = obj.DtCode,
                 TypeId = obj.TypeId,
                 UpdateTime = DateTime.Now,
-                UpdateUserId = user.Id,
-                UpdateUserName = user.Name
+                UpdateUserId = user.Id
                //todo:要修改的字段賦值
             });
 

@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using donkeymove.App;
 using donkeymove.App.Request;
 using donkeymove.App.Response;
+using donkeymove.Repository.Domain;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
 
 namespace donkeymove.WebApi.Controllers
 {
@@ -24,13 +27,32 @@ namespace donkeymove.WebApi.Controllers
         }
 
         //添加
-        [HttpPost]
-        public Response Add(AddOrUpdateCategoryTypeReq obj)
+        [HttpGet]
+        [AllowAnonymous]
+        public Response<List<CategoryType>> GetList([FromQuery] AddOrUpdateCategoryTypeReq obj)
         {
-            var result = new Response();
+            var result = new Response<List<CategoryType>>();
             try
             {
-                _app.Add(obj);
+                result.Result = _app.GetList(obj);
+            }
+            catch (Exception ex)
+            {
+                result.Code = 500;
+                result.Message = ex.InnerException?.Message ?? ex.Message;
+            }
+
+            return result;
+        }
+
+        //添加
+        [HttpPost]
+        public Response<string> Add([FromBody]AddOrUpdateCategoryTypeReq obj)
+        {
+            var result = new Response<string>();
+            try
+            {
+                result.Result = _app.Add(obj);
             }
             catch (Exception ex)
             {

@@ -24,11 +24,11 @@ namespace donkeymove.App.ServiceTimes
         public string Add(AddServiceTimesReq serviceTimes)
         {
             var obj = serviceTimes.MapTo<Repository.Domain.ServiceTimes>();
-            obj.GenerateDefaultKeyVal();
+            if (obj.KeyIsNull()) obj.GenerateDefaultKeyVal();
             obj.CreateTime = DateTime.Now;
             var user = _auth.GetCurrentUser().User;
-            obj.CreateId = user.Id;
-            obj.UpdateId = user.Id;
+            obj.CreateUserId = user.Id;
+            obj.UpdateUserId = user.Id;
             Repository.Add(obj);
             return obj.Id;
         }
@@ -40,7 +40,7 @@ namespace donkeymove.App.ServiceTimes
             {
                 NumberTimes = serviceTimes.NumberTimes,                
                 UpdateTime = DateTime.Now,
-                UpdateId = user.Id,                
+                UpdateUserId = user.Id,                
             });
         }
 
