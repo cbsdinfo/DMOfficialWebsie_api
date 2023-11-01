@@ -1,30 +1,17 @@
-using System;
-using System.ComponentModel.DataAnnotations.Schema;
-using donkeymove.Repository.Core;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace donkeymove.Repository.Domain
+namespace donkeymove.App.Response
 {
-    /// <summary>
-	/// 文件
-	/// </summary>
-    [Table("UploadFile")]
-    public partial class UploadFile : StringEntity
+    public class UploadFileResp
     {
-        public UploadFile()
-        {
-            this.FileName = string.Empty;
-            this.FilePath = string.Empty;
-            this.Description = string.Empty;
-            this.FileType = string.Empty;
-            this.Extension = string.Empty;
-            this.SortCode = 0;
-            this.CreateUserId = string.Empty;
-            this.CreateUserName = string.Empty;
-            this.CreateTime = DateTime.Now;
-            this.Thumbnail = string.Empty;
-            this.BelongApp = string.Empty;
-            this.BelongAppId = string.Empty;
-        }
+        /// <summary>
+        /// 序號
+        /// </summary>
+        public string Id { get; set; }
 
         /// <summary>
 	    /// 文件名稱
