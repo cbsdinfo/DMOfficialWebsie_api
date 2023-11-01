@@ -19,6 +19,11 @@ namespace donkeymove.App.Response
         public string ClInfoNewsType { get; set; }
 
         /// <summary>
+        /// 文章類別 參考 CategoryType.Name = InfoNewsType
+        /// </summary>
+        public string InfoNewsTypeName { get; set; }
+
+        /// <summary>
         /// 發布日期
         /// </summary>
         public DateTime ReleaseTime { get; set; }
@@ -26,7 +31,12 @@ namespace donkeymove.App.Response
         /// <summary>
         /// 圖片路徑
         /// </summary>
-        public string ImagePath { get; set; }
+        public string Image { get; set; }
+
+        /// <summary>
+        /// 圖片明細
+        /// </summary>
+        public UploadFileResp ImageDetail { get; set; }
 
         /// <summary>
         /// 標題
@@ -46,7 +56,12 @@ namespace donkeymove.App.Response
         /// <summary>
         /// 作者照片
         /// </summary>
-        public string PhotoAuthorPath { get; set; }
+        public string PhotoAuthor { get; set; }
+
+        /// <summary>
+        /// 作者照片
+        /// </summary>
+        public UploadFileResp PhotoAuthorDetail { get; set; }
 
         /// <summary>
         /// 作者介紹

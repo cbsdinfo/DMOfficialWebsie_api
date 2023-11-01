@@ -38,7 +38,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="InfoNews\Request\" />
     <Folder Include="ServiceTimes\Response\" />
   </ItemGroup>
 

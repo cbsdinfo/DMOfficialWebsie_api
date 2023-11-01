@@ -7,40 +7,96 @@ using donkeymove.Repository.Interface;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using Infrastructure.Extensions;
+using Infrastructure;
+using Infrastructure.Const;
 
 namespace donkeymove.App
 {
     public class InfoNewsApp : BaseStringApp<InfoNews, donkeymoveDBContext>
     {
-        public InfoNewsApp(IUnitWork<donkeymoveDBContext> unitWork, 
-            IRepository<InfoNews, donkeymoveDBContext> repository, 
+        public InfoNewsApp(IUnitWork<donkeymoveDBContext> unitWork,
+            IRepository<InfoNews, donkeymoveDBContext> repository,
             IAuth auth) : base(unitWork, repository, auth)
         {
         }
 
-        public SocialPracticeResp GetById(string id)
+        public InfoNewsResp GetById(string id)
         {
-            var result = UnitWork.Find<SocialPractice>(u => u.Id == id).Select(x => new SocialPracticeResp
-            {
-                Id = x.Id,
-                Title = x.Title,
-                YoutubeUrl = x.YoutubeUrl,
-                Abstract = x.Abstract,
-                SubTitle1 = x.SubTitle1,
-                SubTitle2 = x.SubTitle2,
-                SubTitle3 = x.SubTitle3,
-                Display = x.Display,
-                UpdateTime = x.UpdateTime,
-                UpdateUserId = x.UpdateUserId,
-                CreateTime = x.CreateTime,
-                CreateUserId = x.CreateUserId
-            }).FirstOrDefault();
+            var infoNewsResult = UnitWork.Find<InfoNews>(u => u.Id == id);
+            var category = UnitWork.Find<Category>(c => c.TypeId == CategoryTypeIdExtensions.GetStringValue(CategoryTypeId.InfoNewsType));
+            
+            var result = infoNewsResult
+                .Join(category,
+                infoNewsResult => infoNewsResult.ClInfoNewsType,
+                category => category.DtCode,
+                (infoNewsResult, category) => new InfoNewsResp
+                {
+                    Id = infoNewsResult.Id,
+                    Title = infoNewsResult.Title,
+                    ClInfoNewsType = infoNewsResult.ClInfoNewsType,
+                    InfoNewsTypeName = category.Name,
+                    ReleaseTime = infoNewsResult.ReleaseTime,
+                    Image = infoNewsResult.Image,
+                    ImageDetail = (from f in UnitWork.Find<UploadFile>(null)
+                                   where infoNewsResult.Image == f.Id
+                                   select new UploadFileResp
+                                   {
+                                       Id = f.Id,
+                                       FileName = f.FileName,
+                                       FilePath = f.FilePath,
+                                       Description = f.Description,
+                                       FileType = f.FileType,
+                                       FileSize = f.FileSize,
+                                       Extension = f.Extension,
+                                       Enable = f.Enable,
+                                       SortCode = f.SortCode,
+                                       DeleteMark = f.DeleteMark,
+                                       CreateUserId = f.CreateUserId,
+                                       CreateUserName = f.CreateUserName,
+                                       CreateTime = f.CreateTime,
+                                       Thumbnail = f.Thumbnail,
+                                       BelongApp = f.BelongApp,
+                                       BelongAppId = f.BelongAppId
+                                   }).FirstOrDefault(),
+                    Content = infoNewsResult.Content,
+                    Link = infoNewsResult.Link,
+                    PhotoAuthor = infoNewsResult.PhotoAuthor,
+                    PhotoAuthorDetail = (from f in UnitWork.Find<UploadFile>(null)
+                                   where infoNewsResult.PhotoAuthor == f.Id
+                                   select new UploadFileResp
+                                   {
+                                       Id = f.Id,
+                                       FileName = f.FileName,
+                                       FilePath = f.FilePath,
+                                       Description = f.Description,
+                                       FileType = f.FileType,
+                                       FileSize = f.FileSize,
+                                       Extension = f.Extension,
+                                       Enable = f.Enable,
+                                       SortCode = f.SortCode,
+                                       DeleteMark = f.DeleteMark,
+                                       CreateUserId = f.CreateUserId,
+                                       CreateUserName = f.CreateUserName,
+                                       CreateTime = f.CreateTime,
+                                       Thumbnail = f.Thumbnail,
+                                       BelongApp = f.BelongApp,
+                                       BelongAppId = f.BelongAppId
+                                   }).FirstOrDefault(),
+                    AboutAuthor = infoNewsResult.AboutAuthor,
+                    Status = infoNewsResult.Status,
+                    UpdateTime = infoNewsResult.UpdateTime,
+                    UpdateUserId = infoNewsResult.UpdateUserId,
+                    CreateTime = infoNewsResult.CreateTime,
+                    CreateUserId = infoNewsResult.CreateUserId
+                }).FirstOrDefault();
+
             return result;
         }
 
-        public string Add(AddSocialPracticeReq request)
+        public string Add(AddInfoNewsReq request)
         {
-            var obj = request.MapTo<SocialPractice>();
+            var obj = request.MapTo<InfoNews>();
             obj.CreateTime = DateTime.Now;
             var user = _auth.GetCurrentUser().User;
             obj.CreateUserId = user.Id;
@@ -49,79 +105,137 @@ namespace donkeymove.App
             return obj.Id;
         }
 
-        public void Update(UpdateSocialPracticeReq request)
+        public void Update(UpdateInfoNewsReq request)
         {
             var user = _auth.GetCurrentUser().User;
-            UnitWork.Update<SocialPractice>(u => u.Id == request.Id, u => new SocialPractice
+            UnitWork.Update<InfoNews>(u => u.Id == request.Id, u => new InfoNews
             {
                 Title = request.Title,
-                YoutubeUrl = request.YoutubeUrl,
-                Abstract = request.Abstract,
-                SubTitle1 = request.SubTitle1,
-                SubTitle2 = request.SubTitle2,
-                SubTitle3 = request.SubTitle3,
-                Display = request.Display,
+                ClInfoNewsType = request.ClInfoNewsType,
+                ReleaseTime = request.ReleaseTime,
+                Image = request.Image,
+                Content = request.Content,
+                Link = request.Link,
+                PhotoAuthor = request.PhotoAuthor,
+                AboutAuthor = request.AboutAuthor,
                 Status = request.Status,
                 UpdateTime = DateTime.Now,
                 UpdateUserId = user.Id,
-                //todo:要修改的字段賦值
             });
         }
 
-        public List<SocialPracticeListResp> GetList(QuerySocialPracticeListReq obj)
+        public List<InfoNewsListResp> GetList(QueryInfoNewsReq obj)
         {
-            var result = UnitWork.Find<SocialPractice>(null);
+            var infoNewsResult = UnitWork.Find<InfoNews>(null);
+
+            if (!obj.ClInfoNewsType.IsNullOrEmpty())
+            {
+                infoNewsResult = infoNewsResult.Where(s => s.ClInfoNewsType.IndexOf(obj.ClInfoNewsType) != -1);
+            }
+
+            if (!obj.ReleaseTimeLb.IsNullOrEmpty())
+            {
+                infoNewsResult = infoNewsResult.Where(s => s.ReleaseTime.Date >= obj.ReleaseTimeLb.Date);
+            }
+
+            if (!obj.ReleaseTimeUb.IsNullOrEmpty())
+            {
+                infoNewsResult = infoNewsResult.Where(s => s.ReleaseTime.Date >= obj.ReleaseTimeLb.Date);
+            }
 
             if (!obj.Title.IsNullOrEmpty())
             {
-                result = result.Where(s => s.Title.IndexOf(obj.Title) != -1);
+                infoNewsResult = infoNewsResult.Where(s => s.Title.IndexOf(obj.Title) != -1);
+            }
+            if (!obj.Content.IsNullOrEmpty())
+            {
+                infoNewsResult = infoNewsResult.Where(s => s.Content.IndexOf(obj.Content) != -1);
+            }
+            if (!obj.Link.IsNullOrEmpty())
+            {
+                infoNewsResult = infoNewsResult.Where(s => s.Link.IndexOf(obj.Link) != -1);
+            }
+                        
+            if (!obj.AboutAuthor.IsNullOrEmpty())
+            {
+                infoNewsResult = infoNewsResult.Where(s => s.AboutAuthor.IndexOf(obj.AboutAuthor) != -1);
             }
 
-            if (!obj.Abstract.IsNullOrEmpty())
-            {
-                result = result.Where(s => s.Abstract.IndexOf(obj.Abstract) != -1);
-            }
-
-            if (!obj.SubTitle1.IsNullOrEmpty())
-            {
-                result = result.Where(s => s.SubTitle1.IndexOf(obj.SubTitle1) != -1);
-            }
-
-            if (!obj.SubTitle2.IsNullOrEmpty())
-            {
-                result = result.Where(s => s.SubTitle2.IndexOf(obj.SubTitle2) != -1);
-            }
-            if (!obj.SubTitle3.IsNullOrEmpty())
-            {
-                result = result.Where(s => s.SubTitle3.IndexOf(obj.SubTitle3) != -1);
-            }
-            if (obj.Display != null)
-            {
-                result = result.Where(s => s.Display.Equals(obj.Display));
-            }
             if (obj.Status != null)
             {
-                result = result.Where(s => s.Status.Equals(obj.Status));
+                infoNewsResult = infoNewsResult.Where(s => s.Status.Equals(obj.Status));
             }
 
-            result = result.OrderByDescending(s => s.CreateTime);
+            infoNewsResult = infoNewsResult.OrderByDescending(s => s.CreateTime);
 
+            var category = UnitWork.Find<Category>(c => c.TypeId == CategoryTypeIdExtensions.GetStringValue(CategoryTypeId.InfoNewsType));
 
-            return result.Select(x => new SocialPracticeListResp()
-            {
-                Id = x.Id,
-                Title = x.Title,
-                YoutubeUrl = x.YoutubeUrl,
-                Abstract = x.Abstract,
-                SubTitle1 = x.SubTitle1,
-                SubTitle2 = x.SubTitle2,
-                SubTitle3 = x.SubTitle3,
-                Display = x.Display,
-                UpdateTime = x.UpdateTime,
-                UpdateUserId = x.UpdateUserId,
-                CreateTime = x.CreateTime,
-                CreateUserId = x.CreateUserId
-            }).ToList();
+            var result = infoNewsResult
+                .Join(category,
+                infoNewsResult => infoNewsResult.ClInfoNewsType,
+                category => category.DtCode,
+                (infoNewsResult, category) => new InfoNewsListResp
+                {
+                    Id = infoNewsResult.Id,
+                    Title = infoNewsResult.Title,
+                    ClInfoNewsType = infoNewsResult.ClInfoNewsType,
+                    InfoNewsTypeName = category.Name,
+                    ReleaseTime = infoNewsResult.ReleaseTime,
+                    Image = infoNewsResult.Image,
+                    ImageDetail = (from f in UnitWork.Find<UploadFile>(null)
+                                   where infoNewsResult.Image == f.Id
+                                   select new UploadFileResp
+                                   {
+                                       Id = f.Id,
+                                       FileName = f.FileName,
+                                       FilePath = f.FilePath,
+                                       Description = f.Description,
+                                       FileType = f.FileType,
+                                       FileSize = f.FileSize,
+                                       Extension = f.Extension,
+                                       Enable = f.Enable,
+                                       SortCode = f.SortCode,
+                                       DeleteMark = f.DeleteMark,
+                                       CreateUserId = f.CreateUserId,
+                                       CreateUserName = f.CreateUserName,
+                                       CreateTime = f.CreateTime,
+                                       Thumbnail = f.Thumbnail,
+                                       BelongApp = f.BelongApp,
+                                       BelongAppId = f.BelongAppId
+                                   }).FirstOrDefault(),
+                    Content = infoNewsResult.Content,
+                    Link = infoNewsResult.Link,
+                    PhotoAuthor = infoNewsResult.PhotoAuthor,
+                    PhotoAuthorDetail = (from f in UnitWork.Find<UploadFile>(null)
+                                         where infoNewsResult.PhotoAuthor == f.Id
+                                         select new UploadFileResp
+                                         {
+                                             Id = f.Id,
+                                             FileName = f.FileName,
+                                             FilePath = f.FilePath,
+                                             Description = f.Description,
+                                             FileType = f.FileType,
+                                             FileSize = f.FileSize,
+                                             Extension = f.Extension,
+                                             Enable = f.Enable,
+                                             SortCode = f.SortCode,
+                                             DeleteMark = f.DeleteMark,
+                                             CreateUserId = f.CreateUserId,
+                                             CreateUserName = f.CreateUserName,
+                                             CreateTime = f.CreateTime,
+                                             Thumbnail = f.Thumbnail,
+                                             BelongApp = f.BelongApp,
+                                             BelongAppId = f.BelongAppId
+                                         }).FirstOrDefault(),
+                    AboutAuthor = infoNewsResult.AboutAuthor,
+                    Status = infoNewsResult.Status,
+                    UpdateTime = infoNewsResult.UpdateTime,
+                    UpdateUserId = infoNewsResult.UpdateUserId,
+                    CreateTime = infoNewsResult.CreateTime,
+                    CreateUserId = infoNewsResult.CreateUserId
+                }).ToList();
+
+            return result;
         }
     }
 }
