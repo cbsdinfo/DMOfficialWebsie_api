@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace donkeymove.App.Request
 {
-    public class QueryServiceTimesListReq
+    public class QueryServiceTimesReq
     {
         /// <summary>
         /// 服務類型名稱

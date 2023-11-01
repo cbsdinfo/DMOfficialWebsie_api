@@ -17,13 +17,13 @@ namespace donkeymove.WebApi.Controllers
     /// </summary>
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [ApiExplorerSettings(GroupName = "社會實踐單元_SocialPracticeUnit")]
+    [ApiExplorerSettings(GroupName = "社會實踐單元管理_SocialPracticeUnitManager")]
 
-    public class SocialPracticeUnitController : ControllerBase
+    public class SocialPracticeUnitManagerController : ControllerBase
     {
         private readonly SocialPracticeApp _app;
 
-        public SocialPracticeUnitController(SocialPracticeApp app)
+        public SocialPracticeUnitManagerController(SocialPracticeApp app)
         {
             _app = app;
         }

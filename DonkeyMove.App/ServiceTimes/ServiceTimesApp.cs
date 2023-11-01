@@ -1,16 +1,13 @@
 ﻿using donkeymove.App.Interface;
 using donkeymove.App.Request;
-using donkeymove.App.Request;
 using donkeymove.Repository;
-using donkeymove.Repository.Interface;
 using donkeymove.Repository.Domain;
+using donkeymove.Repository.Interface;
 using Infrastructure;
 using Infrastructure.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace donkeymove.App
 {
@@ -24,7 +21,7 @@ namespace donkeymove.App
 
         public string Add(AddServiceTimesReq serviceTimes)
         {
-            var obj = serviceTimes.MapTo<Repository.Domain.ServiceTimes>();
+            var obj = serviceTimes.MapTo<ServiceTimes>();
             obj.CreateTime = DateTime.Now;
             var user = _auth.GetCurrentUser().User;
             obj.CreateUserId = user.Id;
@@ -36,7 +33,7 @@ namespace donkeymove.App
         public void Update(UpdateServiceTimesReq serviceTimes)
         {
             var user = _auth.GetCurrentUser().User;
-            UnitWork.Update<Repository.Domain.ServiceTimes>(u => u.Id == serviceTimes.Id, u => new Repository.Domain.ServiceTimes
+            UnitWork.Update<ServiceTimes>(u => u.Id == serviceTimes.Id, u => new ServiceTimes
             {
                 NumberTimes = serviceTimes.NumberTimes,                
                 UpdateTime = DateTime.Now,
@@ -44,9 +41,9 @@ namespace donkeymove.App
             });
         }
 
-        public List<Repository.Domain.ServiceTimes> GetList(QueryServiceTimesListReq obj)
+        public List<ServiceTimes> GetList(QueryServiceTimesReq obj)
         {
-            var result = UnitWork.Find<Repository.Domain.ServiceTimes>(null);
+            var result = UnitWork.Find<ServiceTimes>(null);
 
             if (!obj.ServiceName.IsNullOrEmpty())
             {

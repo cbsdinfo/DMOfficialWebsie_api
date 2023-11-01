@@ -17,11 +17,11 @@ namespace donkeymove.WebApi.Controllers
     [Route("api/[controller]/[action]")]
     [ApiController]
     [ApiExplorerSettings(GroupName = "首頁服務次數管理_ServiceTimesManager")]
-    public class ServiceTimesManagerController : ControllerBase
+    public class ServiceTimesUnitManagerController : ControllerBase
     {
         private readonly ServiceTimesApp _app;
 
-        public ServiceTimesManagerController(ServiceTimesApp app)
+        public ServiceTimesUnitManagerController(ServiceTimesApp app)
         {
             _app = app;
         }
@@ -46,7 +46,7 @@ namespace donkeymove.WebApi.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public Response<List<ServiceTimes>> GetList([FromQuery] QueryServiceTimesListReq obj)
+        public Response<List<ServiceTimes>> GetList([FromQuery] QueryServiceTimesReq obj)
         {
             var result = new Response<List<ServiceTimes>>();
             try
