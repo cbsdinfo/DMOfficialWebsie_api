@@ -44,7 +44,7 @@ namespace donkeymove.WebApi.Controllers
         }
 
         /// <summary>
-        /// 獲取分類集合 By TypdId
+        /// 獲取分類集合 By TypeId
         /// </summary>
         /// <param name="TypeId">分類id</param>
         /// <returns></returns>
