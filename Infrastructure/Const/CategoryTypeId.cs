@@ -9,7 +9,7 @@ namespace Infrastructure.Const
 {
     public enum CategoryTypeId
     {
-        文章分類, 
+        InfoNewsType, 
     }
 
     public static class CategoryTypeIdExtensions
@@ -18,7 +18,7 @@ namespace Infrastructure.Const
         {
             switch (categoryTypeId)
             {
-                case CategoryTypeId.文章分類:
+                case CategoryTypeId.InfoNewsType:
                     return "b6f5998e-9bef-46c6-9d84-b1b1862350c7";                
                 default:
                     throw new ArgumentOutOfRangeException(nameof(categoryTypeId), categoryTypeId, null);
