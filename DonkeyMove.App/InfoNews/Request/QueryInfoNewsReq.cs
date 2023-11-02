@@ -8,9 +8,9 @@ namespace donkeymove.App.Request
     
     public partial class QueryInfoNewsReq
     {
-        
+
         /// <summary>
-        /// 文章類別 參考 CategoryType.Name = InfoNewsType
+        /// 文章類別 參考 CategoryType.TypeId = "b6f5998e-9bef-46c6-9d84-b1b1862350c7" 取 dtCode or dtValue
         /// </summary>
         public string ClInfoNewsType { get; set; }
 

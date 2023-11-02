@@ -133,12 +133,12 @@ namespace donkeymove.App
                 infoNewsResult = infoNewsResult.Where(s => s.ClInfoNewsType.IndexOf(obj.ClInfoNewsType) != -1);
             }
 
-            if (!obj.ReleaseTimeLb.IsNullOrEmpty())
+            if (!obj.ReleaseTimeLb.IsNullOrEmpty() && obj.ReleaseTimeLb.Date != DateTime.Parse("0001-01-01"))
             {
                 infoNewsResult = infoNewsResult.Where(s => s.ReleaseTime.Date >= obj.ReleaseTimeLb.Date);
             }
 
-            if (!obj.ReleaseTimeUb.IsNullOrEmpty())
+            if (!obj.ReleaseTimeUb.IsNullOrEmpty() && obj.ReleaseTimeUb.Date != DateTime.Parse("0001-01-01"))
             {
                 infoNewsResult = infoNewsResult.Where(s => s.ReleaseTime.Date <= obj.ReleaseTimeUb.Date);
             }
