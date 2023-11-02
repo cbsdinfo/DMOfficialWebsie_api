@@ -9,11 +9,6 @@ namespace donkeymove.App.Request
     public class AddServiceTimesReq
     {
         /// <summary>
-        /// 序號
-        /// </summary>
-        public string Id { get; set; }
-
-        /// <summary>
         /// 服務類型名稱
         /// </summary>
         public string ServiceName { get; set; }

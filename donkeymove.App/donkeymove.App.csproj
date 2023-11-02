@@ -37,8 +37,4 @@
     <ProjectReference Include="..\donkeymove.Repository\donkeymove.Repository.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ServiceTimes\Response\" />
-  </ItemGroup>
-
 </Project>

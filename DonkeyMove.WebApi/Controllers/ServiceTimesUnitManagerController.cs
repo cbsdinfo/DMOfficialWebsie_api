@@ -1,5 +1,6 @@
 ﻿using donkeymove.App;
 using donkeymove.App.Request;
+using donkeymove.App.Response;
 using donkeymove.Repository.Domain;
 using Infrastructure;
 using Microsoft.AspNetCore.Authorization;
@@ -28,12 +29,12 @@ namespace donkeymove.WebApi.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public Response<ServiceTimes> Get(string id)
+        public Response<ServiceTimesResp> Get(string id)
         {
-            var result = new Response<ServiceTimes>();
+            var result = new Response<ServiceTimesResp>();
             try
             {
-                result.Result = _app.Get(id);
+                result.Result = _app.GetById(id);
             }
             catch (Exception ex)
             {
@@ -46,9 +47,9 @@ namespace donkeymove.WebApi.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public Response<List<ServiceTimes>> GetList([FromQuery] QueryServiceTimesReq obj)
+        public Response<List<ServiceTimesListResp>> GetList([FromQuery] QueryServiceTimesReq obj)
         {
-            var result = new Response<List<ServiceTimes>>();
+            var result = new Response<List<ServiceTimesListResp>>();
             try
             {
                 var res = _app.GetList(obj);
