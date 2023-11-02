@@ -140,7 +140,7 @@ namespace donkeymove.App
 
             if (!obj.ReleaseTimeUb.IsNullOrEmpty())
             {
-                infoNewsResult = infoNewsResult.Where(s => s.ReleaseTime.Date >= obj.ReleaseTimeLb.Date);
+                infoNewsResult = infoNewsResult.Where(s => s.ReleaseTime.Date <= obj.ReleaseTimeUb.Date);
             }
 
             if (!obj.Title.IsNullOrEmpty())

@@ -38,10 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="InfoNews\Response\" />
-    <Folder Include="InfoNews\Request\" />
     <Folder Include="ServiceTimes\Response\" />
-    <Folder Include="SocialPractice\Response\" />
   </ItemGroup>
 
 </Project>
