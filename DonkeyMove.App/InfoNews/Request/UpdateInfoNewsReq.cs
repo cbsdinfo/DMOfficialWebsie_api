@@ -1,6 +1,7 @@
 ﻿using donkeymove.Repository.Core;
 using System;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace donkeymove.App.Request
@@ -11,26 +12,33 @@ namespace donkeymove.App.Request
         /// <summary>
         /// 序號
         /// </summary>
+        [Required]
         public string Id { get; set; }
-        
+
         /// <summary>
         /// 文章類別 參考 CategoryType.Name = InfoNewsType
         /// </summary>
+        [Required]
         public string ClInfoNewsType { get; set; }
+
 
         /// <summary>
         /// 發布日期
         /// </summary>
+        [Required]
+        [DataType(DataType.Date)] 
         public DateTime ReleaseTime { get; set; }
 
         /// <summary>
         /// 圖片Id（UploadFile後取得Id填入）
         /// </summary>
+        [Required]
         public string Image { get; set; }
 
         /// <summary>
         /// 標題
         /// </summary>
+        [Required]
         public string Title { get; set; }
 
         /// <summary>
@@ -41,6 +49,7 @@ namespace donkeymove.App.Request
         /// <summary>
         /// 連結
         /// </summary>
+        [Url]
         public string Link { get; set; }
 
         /// <summary>
@@ -54,8 +63,9 @@ namespace donkeymove.App.Request
         public string AboutAuthor { get; set; }
 
         /// <summary>
-        /// 狀態（是否顯示於前台）
+        /// 狀態（啟用/隱藏）
         /// </summary>
+        [Required]
         public bool Status { get; set; }
     }
 }

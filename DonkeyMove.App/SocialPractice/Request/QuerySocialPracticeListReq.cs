@@ -34,12 +34,12 @@ namespace donkeymove.App.Request
         public string SubTitle3 { get; set; }
 
         /// <summary>
-        /// 是否顯示於首頁
+        /// 顯示於首頁（是/否）
         /// </summary>        
         public bool? Display { get; set; }
 
         /// <summary>
-        /// 是否顯示於首頁
+        /// 狀態（啟用/隱藏）
         /// </summary>        
         public bool? Status { get; set; }
     }
