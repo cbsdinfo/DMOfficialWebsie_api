@@ -3,6 +3,7 @@ using donkeymove.App.Request;
 using donkeymove.App.Response;
 using donkeymove.Repository.Domain;
 using Infrastructure;
+using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,26 +14,26 @@ using System.Collections.Generic;
 namespace donkeymove.WebApi.Controllers
 {
     /// <summary>
-    /// 最新消息單元管理
+    /// 主視覺管理
     /// </summary>
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [ApiExplorerSettings(GroupName = "最新消息單元管理_InfoNewsUnitManager")]
+    [ApiExplorerSettings(GroupName = "主視覺管理_KeyVisualManager")]
 
-    public class InfoNewsUnitManagerController : ControllerBase
+    public class KeyVisualManagerController : ControllerBase
     {
-        private readonly InfoNewsApp _app;
+        private readonly KeyVisualApp _app;
 
-        public InfoNewsUnitManagerController(InfoNewsApp app)
+        public KeyVisualManagerController(KeyVisualApp app)
         {
             _app = app;
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public Response<InfoNewsResp> Get(string id)
+        public Response<KeyVisualResp> Get(string id)
         {
-            var result = new Response<InfoNewsResp>();
+            var result = new Response<KeyVisualResp>();
             try
             {
                 result.Result = _app.GetById(id);
@@ -42,14 +43,15 @@ namespace donkeymove.WebApi.Controllers
                 result.Code = 500;
                 result.Message = ex.InnerException?.Message ?? ex.Message;
             }
+
             return result;
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public Response<List<InfoNewsListResp>> GetList([FromQuery] QueryInfoNewsReq obj)
+        public Response<List<KeyVisualListResp>> GetList(QueryKeyVisualReq obj)
         {
-            var result = new Response<List<InfoNewsListResp>>();
+            var result = new Response<List<KeyVisualListResp>>();
             try
             {
                 var res = _app.GetList(obj);
@@ -60,11 +62,12 @@ namespace donkeymove.WebApi.Controllers
                 result.Code = 500;
                 result.Message = ex.InnerException?.Message ?? ex.Message;
             }
+
             return result;
         }
 
         [HttpPost]
-        public Response<string> Add([FromBody] AddInfoNewsReq obj)
+        public Response<string> Add([FromBody] AddKeyVisualReq obj)
         {
             var resp = new Response<string>();
             try
@@ -80,7 +83,7 @@ namespace donkeymove.WebApi.Controllers
         }
 
         [HttpPost]
-        public Response Update([FromBody] UpdateInfoNewsReq obj)
+        public Response Update([FromBody] UpdateKeyVisualReq obj)
         {
             Response resp = new Response();
             try

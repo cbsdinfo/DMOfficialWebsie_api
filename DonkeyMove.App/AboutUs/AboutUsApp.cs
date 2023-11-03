@@ -56,5 +56,20 @@ namespace donkeymove.App
             }).FirstOrDefault();
             return result;
         }
+
+        public List<AboutUsListResp> GetList()
+        {
+            var result = UnitWork.Find<AboutUs>(null);
+                        
+            return result.Select(x => new AboutUsListResp()
+            {
+                Id = x.Id,
+                Content = x.Content,
+                UpdateTime = x.UpdateTime,
+                UpdateUserId = x.UpdateUserId,
+                CreateTime = x.CreateTime,
+                CreateUserId = x.CreateUserId
+            }).ToList();
+        }
     }
 }

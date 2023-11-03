@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace donkeymove.Repository.Domain
 {
     /// <summary>
-    /// 首頁服務次數管理
+    /// 最新消息單元管理
     /// </summary>
     [Table("InfoNews")]
     public partial class InfoNews : StringEntity
@@ -41,9 +41,9 @@ namespace donkeymove.Repository.Domain
         public DateTime ReleaseTime { get; set; }
 
         /// <summary>
-        /// 圖片路徑
+        /// 圖檔
         /// </summary>
-        [Description("圖片路徑")]
+        [Description("圖片")]
         public string Image { get; set; }
 
         /// <summary>

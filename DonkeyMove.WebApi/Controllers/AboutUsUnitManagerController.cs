@@ -3,6 +3,7 @@ using donkeymove.App.Request;
 using donkeymove.App.Response;
 using donkeymove.Repository.Domain;
 using Infrastructure;
+using Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -45,7 +46,26 @@ namespace donkeymove.WebApi.Controllers
 
             return result;
         }
-        
+
+        [HttpGet]
+        [AllowAnonymous]
+        public Response<List<AboutUsListResp>> GetList()
+        {
+            var result = new Response<List<AboutUsListResp>>();
+            try
+            {
+                var res = _app.GetList();
+                result.Result = res;
+            }
+            catch (Exception ex)
+            {
+                result.Code = 500;
+                result.Message = ex.InnerException?.Message ?? ex.Message;
+            }
+
+            return result;
+        }
+
         [HttpPost]
         public Response<string> Add([FromBody] AddAboutUsReq obj)
         {

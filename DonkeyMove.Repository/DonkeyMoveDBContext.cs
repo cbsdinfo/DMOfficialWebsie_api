@@ -85,6 +85,11 @@ namespace donkeymove.Repository
 
         public virtual DbSet<AboutUs> AboutUs { get; set; }
 
+        public virtual DbSet<KeyVisual> KeyVisuals { get; set; }
+
+        public virtual DbSet<Partner> Partners { get; set; }
+
+
         //非數據庫表格
         public virtual DbSet<QueryStringObj> QueryStringObjs { get; set; }
 
