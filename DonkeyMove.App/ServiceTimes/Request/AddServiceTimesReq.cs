@@ -18,6 +18,7 @@ namespace donkeymove.App.Request
         /// <summary>
         /// 服務次數
         /// </summary>        
+        [RegularExpression(@"^\d{1,3}(,\d{3})*(\.\d+)?$")]
         [Required]
         public string NumberTimes { get; set; }        
     }

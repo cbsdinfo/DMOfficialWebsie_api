@@ -15,10 +15,12 @@ namespace donkeymove.App.Request
         [Required]
         public string Id { get; set; }
 
+
         /// <summary>
         /// 服務次數
         /// </summary>        
         [Required]
-        public string NumberTimes { get; set; }        
+        [RegularExpression(@"^\d{1,3}(,\d{3})*(\.\d+)?$")]
+        public string NumberTimes { get; set; }
     }
 }
