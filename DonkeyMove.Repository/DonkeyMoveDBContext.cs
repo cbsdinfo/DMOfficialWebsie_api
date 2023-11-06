@@ -87,7 +87,7 @@ namespace donkeymove.Repository
 
         public virtual DbSet<KeyVisual> KeyVisuals { get; set; }
 
-        public virtual DbSet<Partner> Partners { get; set; }
+        public virtual DbSet<CooperatePartner> Partners { get; set; }
 
 
         //非數據庫表格
