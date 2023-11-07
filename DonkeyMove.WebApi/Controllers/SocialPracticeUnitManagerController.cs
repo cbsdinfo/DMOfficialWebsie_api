@@ -48,7 +48,7 @@ namespace donkeymove.WebApi.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public Response<List<SocialPracticeListResp>> GetList([FromQuery] QuerySocialPracticeListReq obj)
+        public Response<List<SocialPracticeListResp>> GetList([FromQuery] QuerySocialPracticeReq obj)
         {
             var result = new Response<List<SocialPracticeListResp>>();
             try

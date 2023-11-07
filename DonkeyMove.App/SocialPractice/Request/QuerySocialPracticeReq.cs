@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace donkeymove.App.Request
 {
-    public class QuerySocialPracticeListReq
+    public class QuerySocialPracticeReq
     {
         /// <summary>
         /// 標題名稱
