@@ -14,5 +14,10 @@ namespace donkeymove.App.Request
         /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// 狀態（上架/下架）
+        /// </summary>
+        public bool? Status { get; set; }
+
     }
 }

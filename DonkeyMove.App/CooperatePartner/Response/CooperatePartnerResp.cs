@@ -29,6 +29,11 @@ namespace donkeymove.App.Response
         public UploadFileResp ImageDetail { get; set; }
 
         /// <summary>
+        /// 狀態（上架/下架）
+        /// </summary>
+        public bool Status { get; set; }
+
+        /// <summary>
         /// 創建時間
         /// </summary>
         public System.DateTime CreateTime { get; set; }

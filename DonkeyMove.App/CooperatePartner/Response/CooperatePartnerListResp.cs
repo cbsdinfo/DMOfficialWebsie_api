@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,11 @@ namespace donkeymove.App.Response
         /// 圖片明細
         /// </summary>
         public UploadFileResp ImageDetail { get; set; }
+
+        /// <summary>
+        /// 狀態（上架/下架）
+        /// </summary>
+        public bool Status { get; set; }
 
         /// <summary>
         /// 創建時間

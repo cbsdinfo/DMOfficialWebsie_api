@@ -50,6 +50,7 @@ namespace donkeymove.App
                                    BelongApp = f.BelongApp,
                                    BelongAppId = f.BelongAppId
                                }).FirstOrDefault(),
+                Status = x.Status,
                 UpdateTime = x.UpdateTime,
                 UpdateUserId = x.UpdateUserId,
                 CreateTime = x.CreateTime,
@@ -75,6 +76,7 @@ namespace donkeymove.App
             UnitWork.Update<CooperatePartner>(u => u.Id == partner.Id, u => new CooperatePartner
             {
                 Image = partner.Image,
+                Status = partner.Status,
                 UpdateTime = DateTime.Now,
                 UpdateUserId = user.Id,
             });
@@ -87,6 +89,11 @@ namespace donkeymove.App
             if (!obj.Name.IsNullOrEmpty())
             {
                 result = result.Where(s => s.Name.IndexOf(obj.Name) != -1);
+            }
+
+            if (!obj.Status.IsNullOrEmpty())
+            {
+                result = result.Where(s => s.Status == obj.Status);
             }
 
             return result.Select(x => new CooperatePartnerListResp
@@ -115,6 +122,7 @@ namespace donkeymove.App
                                    BelongApp = f.BelongApp,
                                    BelongAppId = f.BelongAppId
                                }).FirstOrDefault(),
+                Status = x.Status,
                 UpdateTime = x.UpdateTime,
                 UpdateUserId = x.UpdateUserId,
                 CreateTime = x.CreateTime,

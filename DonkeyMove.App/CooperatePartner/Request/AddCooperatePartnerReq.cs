@@ -20,5 +20,11 @@ namespace donkeymove.App.Request
         /// </summary>
         [Required]
         public string Image { get; set; }
+
+        /// <summary>
+        /// 狀態（上架/下架）
+        /// </summary>
+        [Required]
+        public bool Status { get; set; }
     }
 }
