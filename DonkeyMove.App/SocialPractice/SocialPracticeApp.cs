@@ -70,7 +70,7 @@ namespace donkeymove.App
             });
         }
 
-        public List<SocialPracticeListResp> GetList(QuerySocialPracticeListReq obj)
+        public List<SocialPracticeListResp> GetList(QuerySocialPracticeReq obj)
         {
             var result = UnitWork.Find<SocialPractice>(null);
 
