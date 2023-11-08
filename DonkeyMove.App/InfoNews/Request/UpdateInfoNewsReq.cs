@@ -26,7 +26,6 @@ namespace donkeymove.App.Request
         /// 發布日期
         /// </summary>
         [Required]
-        [DataType(DataType.Date)] 
         public DateTime ReleaseTime { get; set; }
 
         /// <summary>
@@ -49,7 +48,8 @@ namespace donkeymove.App.Request
         /// <summary>
         /// 連結
         /// </summary>
-        [Url]
+        [Required]
+        [Url(ErrorMessage = "此欄位需為 Url 格式。")]
         public string Link { get; set; }
 
         /// <summary>

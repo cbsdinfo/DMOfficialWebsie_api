@@ -43,7 +43,8 @@ namespace donkeymove.App.Request
         /// <summary>
         /// 連結
         /// </summary>
-        [Url]
+        [Required]
+        [Url(ErrorMessage ="此欄位需為 Url 格式。")]
         public string Link { get; set; }
 
         /// <summary>

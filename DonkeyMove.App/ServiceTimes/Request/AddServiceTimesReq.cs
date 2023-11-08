@@ -18,7 +18,7 @@ namespace donkeymove.App.Request
         /// <summary>
         /// 服務次數
         /// </summary>        
-        [RegularExpression(@"^\d{1,3}(,\d{3})*$")]
+        [RegularExpression(@"^\d{1,3}(,\d{3})*$", ErrorMessage = "請輸入包含千分號之數字")]
         [Required]
         public string NumberTimes { get; set; }        
     }
