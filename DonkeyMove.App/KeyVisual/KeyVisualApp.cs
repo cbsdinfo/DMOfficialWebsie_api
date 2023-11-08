@@ -16,8 +16,13 @@ namespace donkeymove.App
 {
     public class KeyVisualApp : BaseStringApp<KeyVisual, donkeymoveDBContext>
     {
-        public KeyVisualApp(IUnitWork<donkeymoveDBContext> unitWork, IRepository<KeyVisual, donkeymoveDBContext> repository, IAuth auth) : base(unitWork, repository, auth)
+        private FileApp _fileApp;
+
+        public KeyVisualApp(IUnitWork<donkeymoveDBContext> unitWork, 
+            IRepository<KeyVisual, donkeymoveDBContext> repository,
+            FileApp fileApp, IAuth auth) : base(unitWork, repository, auth)
         {
+            _fileApp = fileApp;
         }
 
 
@@ -57,9 +62,18 @@ namespace donkeymove.App
             return result;
         }
 
-        public string Add(AddKeyVisualReq keyVisual)
+        public string Add(AddKeyVisualReq request)
         {
-            var obj = keyVisual.MapTo<KeyVisual>();
+            if (!request.Image.IsNullOrEmpty())
+            {
+                var file = _fileApp.Get(request.Image);
+                if (file == null)
+                {
+                    throw new Exception("查無此 Image (Files.Id)。");
+                }
+            }
+
+            var obj = request.MapTo<KeyVisual>();
             obj.CreateTime = DateTime.Now;
             var user = _auth.GetCurrentUser().User;
             obj.CreateUserId = user.Id;
@@ -68,12 +82,21 @@ namespace donkeymove.App
             return obj.Id;
         }
 
-        public void Update(UpdateKeyVisualReq keyVisual)
+        public void Update(UpdateKeyVisualReq request)
         {
-            var user = _auth.GetCurrentUser().User;
-            UnitWork.Update<KeyVisual>(u => u.Id == keyVisual.Id, u => new KeyVisual
+            if (!request.Image.IsNullOrEmpty())
             {
-                Image = keyVisual.Image,
+                var file = _fileApp.Get(request.Image);
+                if (file == null)
+                {
+                    throw new Exception("查無此 Image (Files.Id)。");
+                }
+            }
+
+            var user = _auth.GetCurrentUser().User;
+            UnitWork.Update<KeyVisual>(u => u.Id == request.Id, u => new KeyVisual
+            {
+                Image = request.Image,
                 UpdateTime = DateTime.Now,
                 UpdateUserId = user.Id,
             });

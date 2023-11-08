@@ -64,21 +64,21 @@ namespace donkeymove.WebApi.Controllers
             return result;
         }
 
-        [HttpPost]
-        public Response<string> Add([FromBody] AddServiceTimesReq obj)
-        {
-            var resp = new Response<string>();
-            try
-            {
-                resp.Result = _app.Add(obj);
-            }
-            catch (Exception e)
-            {
-                resp.Code = 500;
-                resp.Message = e.Message;
-            }
-            return resp;
-        }
+        //[HttpPost]
+        //public Response<string> Add([FromBody] AddServiceTimesReq obj)
+        //{
+        //    var resp = new Response<string>();
+        //    try
+        //    {
+        //        resp.Result = _app.Add(obj);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        resp.Code = 500;
+        //        resp.Message = e.Message;
+        //    }
+        //    return resp;
+        //}
 
         [HttpPost]
         public Response Update([FromBody] UpdateServiceTimesReq obj)
@@ -96,20 +96,20 @@ namespace donkeymove.WebApi.Controllers
             return resp;
         }
 
-        [HttpPost]
-        public Response Delete([FromBody] string[] ids)
-        {
-            Response resp = new Response();
-            try
-            {
-                _app.Delete(ids);
-            }
-            catch (Exception e)
-            {
-                resp.Code = 500;
-                resp.Message = e.Message;
-            }
-            return resp;
-        }
+        //[HttpPost]
+        //public Response Delete([FromBody] string[] ids)
+        //{
+        //    Response resp = new Response();
+        //    try
+        //    {
+        //        _app.Delete(ids);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        resp.Code = 500;
+        //        resp.Message = e.Message;
+        //    }
+        //    return resp;
+        //}
     }
 }

@@ -16,9 +16,13 @@ namespace donkeymove.App
 {
     public class CooperatePartnerApp : BaseStringApp<CooperatePartner, donkeymoveDBContext>
     {
+        private FileApp _fileApp;
+
         public CooperatePartnerApp(IUnitWork<donkeymoveDBContext> unitWork, 
-            IRepository<CooperatePartner, donkeymoveDBContext> repository, IAuth auth) : base(unitWork, repository, auth)
+            IRepository<CooperatePartner, donkeymoveDBContext> repository, 
+            FileApp fileApp, IAuth auth) : base(unitWork, repository, auth)
         {
+            _fileApp = fileApp;
         }
 
 
@@ -59,9 +63,18 @@ namespace donkeymove.App
             return result;
         }
 
-        public string Add(AddCooperatePartnerReq partner)
+        public string Add(AddCooperatePartnerReq request)
         {
-            var obj = partner.MapTo<CooperatePartner>();
+            if (!request.Image.IsNullOrEmpty())
+            {
+                var file = _fileApp.Get(request.Image);
+                if (file == null)
+                {
+                    throw new Exception("查無此 Image (Files.Id)。");
+                }
+            }
+
+            var obj = request.MapTo<CooperatePartner>();
             obj.CreateTime = DateTime.Now;
             var user = _auth.GetCurrentUser().User;
             obj.CreateUserId = user.Id;
@@ -70,13 +83,22 @@ namespace donkeymove.App
             return obj.Id;
         }
 
-        public void Update(UpdateCooperatePartnerReq partner)
+        public void Update(UpdateCooperatePartnerReq request)
         {
-            var user = _auth.GetCurrentUser().User;
-            UnitWork.Update<CooperatePartner>(u => u.Id == partner.Id, u => new CooperatePartner
+            if (!request.Image.IsNullOrEmpty())
             {
-                Image = partner.Image,
-                Status = partner.Status,
+                var file = _fileApp.Get(request.Image);
+                if (file == null)
+                {
+                    throw new Exception("查無此 Image (Files.Id)。");
+                }
+            }
+
+            var user = _auth.GetCurrentUser().User;
+            UnitWork.Update<CooperatePartner>(u => u.Id == request.Id, u => new CooperatePartner
+            {
+                Image = request.Image,
+                Status = request.Status,
                 UpdateTime = DateTime.Now,
                 UpdateUserId = user.Id,
             });

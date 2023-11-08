@@ -15,17 +15,19 @@ namespace donkeymove.App
 {
     public class InfoNewsApp : BaseStringApp<InfoNews, donkeymoveDBContext>
     {
+        private FileApp _fileApp;
         public InfoNewsApp(IUnitWork<donkeymoveDBContext> unitWork,
             IRepository<InfoNews, donkeymoveDBContext> repository,
-            IAuth auth) : base(unitWork, repository, auth)
+            FileApp fileApp, IAuth auth) : base(unitWork, repository, auth)
         {
+            _fileApp = fileApp;
         }
 
         public InfoNewsResp GetById(string id)
         {
             var infoNewsResult = UnitWork.Find<InfoNews>(u => u.Id == id);
             var category = UnitWork.Find<Category>(c => c.TypeId == CategoryTypeIdExtensions.GetStringValue(CategoryTypeId.InfoNewsType));
-            
+
             var result = infoNewsResult
                 .Join(category,
                 infoNewsResult => infoNewsResult.ClInfoNewsType,
@@ -63,26 +65,26 @@ namespace donkeymove.App
                     Link = infoNewsResult.Link,
                     PhotoAuthor = infoNewsResult.PhotoAuthor,
                     PhotoAuthorDetail = (from f in UnitWork.Find<UploadFile>(null)
-                                   where infoNewsResult.PhotoAuthor == f.Id
-                                   select new UploadFileResp
-                                   {
-                                       Id = f.Id,
-                                       FileName = f.FileName,
-                                       FilePath = f.FilePath,
-                                       Description = f.Description,
-                                       FileType = f.FileType,
-                                       FileSize = f.FileSize,
-                                       Extension = f.Extension,
-                                       Enable = f.Enable,
-                                       SortCode = f.SortCode,
-                                       DeleteMark = f.DeleteMark,
-                                       CreateUserId = f.CreateUserId,
-                                       CreateUserName = f.CreateUserName,
-                                       CreateTime = f.CreateTime,
-                                       Thumbnail = f.Thumbnail,
-                                       BelongApp = f.BelongApp,
-                                       BelongAppId = f.BelongAppId
-                                   }).FirstOrDefault(),
+                                         where infoNewsResult.PhotoAuthor == f.Id
+                                         select new UploadFileResp
+                                         {
+                                             Id = f.Id,
+                                             FileName = f.FileName,
+                                             FilePath = f.FilePath,
+                                             Description = f.Description,
+                                             FileType = f.FileType,
+                                             FileSize = f.FileSize,
+                                             Extension = f.Extension,
+                                             Enable = f.Enable,
+                                             SortCode = f.SortCode,
+                                             DeleteMark = f.DeleteMark,
+                                             CreateUserId = f.CreateUserId,
+                                             CreateUserName = f.CreateUserName,
+                                             CreateTime = f.CreateTime,
+                                             Thumbnail = f.Thumbnail,
+                                             BelongApp = f.BelongApp,
+                                             BelongAppId = f.BelongAppId
+                                         }).FirstOrDefault(),
                     AboutAuthor = infoNewsResult.AboutAuthor,
                     Status = infoNewsResult.Status,
                     UpdateTime = infoNewsResult.UpdateTime,
@@ -96,6 +98,32 @@ namespace donkeymove.App
 
         public string Add(AddInfoNewsReq request)
         {
+            var category = UnitWork.Find<Category>(
+                c => c.TypeId == CategoryTypeIdExtensions.GetStringValue(CategoryTypeId.InfoNewsType) 
+                && c.DtCode == request.ClInfoNewsType);
+            if (category == null || category.Count() == 0)
+            {
+                throw new Exception("ClInfoNewsType 為無效值。");
+            }
+
+            if (!request.Image.IsNullOrEmpty())
+            {
+                var file = _fileApp.Get(request.Image);
+                if (file == null)
+                {
+                    throw new Exception("查無此 Image (Files.Id)。");
+                }
+            }
+
+            if (!request.PhotoAuthor.IsNullOrEmpty())
+            {
+                var file = _fileApp.Get(request.PhotoAuthor);
+                if (file == null)
+                {
+                    throw new Exception("查無此 PhotoAuthor (Files.Id)。");
+                }
+            }
+
             var obj = request.MapTo<InfoNews>();
             obj.CreateTime = DateTime.Now;
             var user = _auth.GetCurrentUser().User;
@@ -107,6 +135,32 @@ namespace donkeymove.App
 
         public void Update(UpdateInfoNewsReq request)
         {
+            var category = UnitWork.Find<Category>(
+                c => c.TypeId == CategoryTypeIdExtensions.GetStringValue(CategoryTypeId.InfoNewsType)
+                && c.DtCode == request.ClInfoNewsType);
+            if (category == null || category.Count() == 0)
+            {
+                throw new Exception("ClInfoNewsType 為無效值。");
+            }
+
+            if (!request.Image.IsNullOrEmpty())
+            {
+                var file = _fileApp.Get(request.Image);
+                if (file == null)
+                {
+                    throw new Exception("查無此 Image (Files.Id)。");
+                }
+            }
+
+            if (!request.PhotoAuthor.IsNullOrEmpty())
+            {
+                var file = _fileApp.Get(request.PhotoAuthor);
+                if (file == null)
+                {
+                    throw new Exception("查無此 PhotoAuthor (Files.Id)。");
+                }
+            }
+
             var user = _auth.GetCurrentUser().User;
             UnitWork.Update<InfoNews>(u => u.Id == request.Id, u => new InfoNews
             {
@@ -155,7 +209,7 @@ namespace donkeymove.App
             {
                 infoNewsResult = infoNewsResult.Where(s => s.Link.IndexOf(obj.Link) != -1);
             }
-                        
+
             if (!obj.AboutAuthor.IsNullOrEmpty())
             {
                 infoNewsResult = infoNewsResult.Where(s => s.AboutAuthor.IndexOf(obj.AboutAuthor) != -1);
