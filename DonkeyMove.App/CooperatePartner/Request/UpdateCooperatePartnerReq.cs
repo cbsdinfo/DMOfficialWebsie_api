@@ -1,4 +1,5 @@
-﻿using System;
+﻿using donkeymove.App.VaildationAttributes;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace donkeymove.App.Request
         /// 圖片 Id（UploadFile 後取得 Id 填入）
         /// </summary>
         [Required]
+        [IsVaildFilesId]
         public string Image { get; set; }
 
         /// <summary>

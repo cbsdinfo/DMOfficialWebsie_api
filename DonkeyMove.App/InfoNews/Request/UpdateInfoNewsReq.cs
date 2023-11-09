@@ -1,4 +1,6 @@
-﻿using donkeymove.Repository.Core;
+﻿using donkeymove.App.VaildationAttributes;
+using donkeymove.Repository.Core;
+using Infrastructure.Const;
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -18,6 +20,7 @@ namespace donkeymove.App.Request
         /// <summary>
         /// 文章類別 參考 CategoryType.Name = InfoNewsType
         /// </summary>
+        [IsVaildCategory(CategoryTypeId.InfoNewsType)]
         [Required]
         public string ClInfoNewsType { get; set; }
 
@@ -32,6 +35,7 @@ namespace donkeymove.App.Request
         /// 圖片Id（UploadFile後取得Id填入）
         /// </summary>
         [Required]
+        [IsVaildFilesId]
         public string Image { get; set; }
 
         /// <summary>
@@ -55,6 +59,7 @@ namespace donkeymove.App.Request
         /// <summary>
         /// 作者照片（UploadFile後取得Id填入）
         /// </summary>
+        [IsVaildFilesId] 
         public string PhotoAuthor { get; set; }
 
         /// <summary>

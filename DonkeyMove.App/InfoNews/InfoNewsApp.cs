@@ -15,12 +15,10 @@ namespace donkeymove.App
 {
     public class InfoNewsApp : BaseStringApp<InfoNews, donkeymoveDBContext>
     {
-        private FileApp _fileApp;
         public InfoNewsApp(IUnitWork<donkeymoveDBContext> unitWork,
             IRepository<InfoNews, donkeymoveDBContext> repository,
-            FileApp fileApp, IAuth auth) : base(unitWork, repository, auth)
+            IAuth auth) : base(unitWork, repository, auth)
         {
-            _fileApp = fileApp;
         }
 
         public InfoNewsResp GetById(string id)
@@ -97,33 +95,7 @@ namespace donkeymove.App
         }
 
         public string Add(AddInfoNewsReq request)
-        {
-            var category = UnitWork.Find<Category>(
-                c => c.TypeId == CategoryTypeIdExtensions.GetStringValue(CategoryTypeId.InfoNewsType) 
-                && c.DtCode == request.ClInfoNewsType);
-            if (category == null || category.Count() == 0)
-            {
-                throw new Exception("ClInfoNewsType 為無效值。");
-            }
-
-            if (!request.Image.IsNullOrEmpty())
-            {
-                var file = _fileApp.Get(request.Image);
-                if (file == null)
-                {
-                    throw new Exception("查無此 Image (Files.Id)。");
-                }
-            }
-
-            if (!request.PhotoAuthor.IsNullOrEmpty())
-            {
-                var file = _fileApp.Get(request.PhotoAuthor);
-                if (file == null)
-                {
-                    throw new Exception("查無此 PhotoAuthor (Files.Id)。");
-                }
-            }
-
+        {            
             var obj = request.MapTo<InfoNews>();
             obj.CreateTime = DateTime.Now;
             var user = _auth.GetCurrentUser().User;
@@ -135,32 +107,6 @@ namespace donkeymove.App
 
         public void Update(UpdateInfoNewsReq request)
         {
-            var category = UnitWork.Find<Category>(
-                c => c.TypeId == CategoryTypeIdExtensions.GetStringValue(CategoryTypeId.InfoNewsType)
-                && c.DtCode == request.ClInfoNewsType);
-            if (category == null || category.Count() == 0)
-            {
-                throw new Exception("ClInfoNewsType 為無效值。");
-            }
-
-            if (!request.Image.IsNullOrEmpty())
-            {
-                var file = _fileApp.Get(request.Image);
-                if (file == null)
-                {
-                    throw new Exception("查無此 Image (Files.Id)。");
-                }
-            }
-
-            if (!request.PhotoAuthor.IsNullOrEmpty())
-            {
-                var file = _fileApp.Get(request.PhotoAuthor);
-                if (file == null)
-                {
-                    throw new Exception("查無此 PhotoAuthor (Files.Id)。");
-                }
-            }
-
             var user = _auth.GetCurrentUser().User;
             UnitWork.Update<InfoNews>(u => u.Id == request.Id, u => new InfoNews
             {

@@ -16,13 +16,11 @@ namespace donkeymove.App
 {
     public class KeyVisualApp : BaseStringApp<KeyVisual, donkeymoveDBContext>
     {
-        private FileApp _fileApp;
 
         public KeyVisualApp(IUnitWork<donkeymoveDBContext> unitWork, 
             IRepository<KeyVisual, donkeymoveDBContext> repository,
-            FileApp fileApp, IAuth auth) : base(unitWork, repository, auth)
+            IAuth auth) : base(unitWork, repository, auth)
         {
-            _fileApp = fileApp;
         }
 
 
@@ -63,16 +61,7 @@ namespace donkeymove.App
         }
 
         public string Add(AddKeyVisualReq request)
-        {
-            if (!request.Image.IsNullOrEmpty())
-            {
-                var file = _fileApp.Get(request.Image);
-                if (file == null)
-                {
-                    throw new Exception("查無此 Image (Files.Id)。");
-                }
-            }
-
+        {            
             var obj = request.MapTo<KeyVisual>();
             obj.CreateTime = DateTime.Now;
             var user = _auth.GetCurrentUser().User;
@@ -83,16 +72,7 @@ namespace donkeymove.App
         }
 
         public void Update(UpdateKeyVisualReq request)
-        {
-            if (!request.Image.IsNullOrEmpty())
-            {
-                var file = _fileApp.Get(request.Image);
-                if (file == null)
-                {
-                    throw new Exception("查無此 Image (Files.Id)。");
-                }
-            }
-
+        {            
             var user = _auth.GetCurrentUser().User;
             UnitWork.Update<KeyVisual>(u => u.Id == request.Id, u => new KeyVisual
             {

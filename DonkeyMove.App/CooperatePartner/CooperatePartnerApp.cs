@@ -16,15 +16,13 @@ namespace donkeymove.App
 {
     public class CooperatePartnerApp : BaseStringApp<CooperatePartner, donkeymoveDBContext>
     {
-        private FileApp _fileApp;
 
         public CooperatePartnerApp(IUnitWork<donkeymoveDBContext> unitWork, 
             IRepository<CooperatePartner, donkeymoveDBContext> repository, 
-            FileApp fileApp, IAuth auth) : base(unitWork, repository, auth)
+            IAuth auth) : base(unitWork, repository, auth)
         {
-            _fileApp = fileApp;
-        }
 
+        }
 
         public CooperatePartnerResp GetById(string id)
         {
@@ -64,16 +62,7 @@ namespace donkeymove.App
         }
 
         public string Add(AddCooperatePartnerReq request)
-        {
-            if (!request.Image.IsNullOrEmpty())
-            {
-                var file = _fileApp.Get(request.Image);
-                if (file == null)
-                {
-                    throw new Exception("查無此 Image (Files.Id)。");
-                }
-            }
-
+        {           
             var obj = request.MapTo<CooperatePartner>();
             obj.CreateTime = DateTime.Now;
             var user = _auth.GetCurrentUser().User;
@@ -85,15 +74,6 @@ namespace donkeymove.App
 
         public void Update(UpdateCooperatePartnerReq request)
         {
-            if (!request.Image.IsNullOrEmpty())
-            {
-                var file = _fileApp.Get(request.Image);
-                if (file == null)
-                {
-                    throw new Exception("查無此 Image (Files.Id)。");
-                }
-            }
-
             var user = _auth.GetCurrentUser().User;
             UnitWork.Update<CooperatePartner>(u => u.Id == request.Id, u => new CooperatePartner
             {
