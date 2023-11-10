@@ -1,12 +1,14 @@
 ﻿using donkeymove.Repository.Core;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace donkeymove.App.Request
 {
-    
-    public partial class QueryInfoNewsReq
+
+    public partial class QueryInfoNewsReq : IValidatableObject
     {
 
         /// <summary>
@@ -23,7 +25,7 @@ namespace donkeymove.App.Request
         /// 發布日期區間上限
         /// </summary>
         public DateTime ReleaseTimeUb { get; set; }
-                
+
         /// <summary>
         /// 標題
         /// </summary>
@@ -48,5 +50,16 @@ namespace donkeymove.App.Request
         /// 狀態（是否顯示於前台）
         /// </summary>
         public bool? Status { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (ReleaseTimeLb.Date != DateTime.Parse("0001-01-01") && ReleaseTimeUb.Date != DateTime.Parse("0001-01-01"))
+            {
+                if (ReleaseTimeLb > ReleaseTimeUb)
+                {
+                    yield return new ValidationResult("發布日期「下限」不得大於「上限」", new string[] { "ReleaseTimeLb", "ReleaseTimeUb" });
+                }
+            }
+        }
     }
 }
