@@ -107,9 +107,12 @@ namespace donkeymove.App
                         Thumbnail = _dbThumbnail,
                         FileName = fileName,
                         FileSize = file.Length.ToInt(),
+                        CreateUserId = _auth.GetCurrentUser().User.Id,
                         CreateUserName = _auth.GetUserName(),
                         FileType = Path.GetExtension(fileName),
-                        Extension = Path.GetExtension(fileName)
+                        Extension = Path.GetExtension(fileName),
+                        
+                        
                     };
                     Repository.Add(filedb);
                     return filedb;

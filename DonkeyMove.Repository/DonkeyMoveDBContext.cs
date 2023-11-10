@@ -77,6 +77,19 @@ namespace donkeymove.Repository
 
         public virtual DbSet<BuilderTableColumn> BuilderTableColumns { get; set; }
 
+        public virtual DbSet<SocialPractice> SocialPractices { get; set; }
+
+        public virtual DbSet<ServiceTimes> ServiceTimes { get; set; }
+
+        public virtual DbSet<InfoNews> InfoNews { get; set; }
+
+        public virtual DbSet<AboutUs> AboutUs { get; set; }
+
+        public virtual DbSet<KeyVisual> KeyVisuals { get; set; }
+
+        public virtual DbSet<CooperatePartner> Partners { get; set; }
+
+
         //非數據庫表格
         public virtual DbSet<QueryStringObj> QueryStringObjs { get; set; }
 

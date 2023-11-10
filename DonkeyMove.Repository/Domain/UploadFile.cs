@@ -18,6 +18,7 @@ namespace donkeymove.Repository.Domain
             this.FileType = string.Empty;
             this.Extension = string.Empty;
             this.SortCode = 0;
+            this.CreateUserId = string.Empty;
             this.CreateUserName = string.Empty;
             this.CreateTime = DateTime.Now;
             this.Thumbnail = string.Empty;
@@ -73,7 +74,7 @@ namespace donkeymove.Repository.Domain
         /// <summary>
 	    /// 上傳人
 	    /// </summary>
-        public System.Guid? CreateUserId { get; set; }
+        public string CreateUserId { get; set; }
 
         /// <summary>
 	    /// 上傳人姓名

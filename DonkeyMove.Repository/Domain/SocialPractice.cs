@@ -19,12 +19,12 @@ namespace donkeymove.Repository.Domain
             this.SubTitle1 = string.Empty;
             this.SubTitle2 = string.Empty;
             this.SubTitle3 = string.Empty;
-            this.Display = 1;
-            this.Status = 1;
+            this.Display = true;
+            this.Status = true;
             this.CreateTime = DateTime.Now;
-            this.CreateId = string.Empty;
+            this.CreateUserId = string.Empty;
             this.UpdateTime = DateTime.Now;
-            this.UpdateId = string.Empty;
+            this.UpdateUserId = string.Empty;
         }
 
         /// <summary>
@@ -67,13 +67,13 @@ namespace donkeymove.Repository.Domain
         /// 是否顯示於首頁
         /// </summary>
         [Description("是否顯示於首頁")]
-        public int Display { get; set; }
+        public bool Display { get; set; }
 
         /// <summary>
-        /// 是否顯示於首頁
+        /// 狀態（是否顯示於前台）
         /// </summary>
-        [Description("是否顯示於首頁")]
-        public int Status { get; set; }
+        [Description("狀態（是否顯示於前台）")]
+        public bool Status { get; set; }
 
         /// <summary>
         /// 創建時間
@@ -85,7 +85,7 @@ namespace donkeymove.Repository.Domain
         /// 創建人
         /// </summary>
         [Description("創建人ID")]
-        public string CreateId { get; set; }
+        public string CreateUserId { get; set; }
 
         /// <summary>
         /// 創建時間
@@ -97,6 +97,6 @@ namespace donkeymove.Repository.Domain
         /// 創建人
         /// </summary>
         [Description("修改人ID")]
-        public string UpdateId { get; set; }
+        public string UpdateUserId { get; set; }
     }
 }
